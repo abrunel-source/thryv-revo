@@ -1,0 +1,25 @@
+---
+import Base from '../../layouts/Base.astro';
+import About from '../../components/pages/About.astro';
+import { site } from '../../data/site';
+import { routes } from '../../i18n/config';
+import { t } from '../../i18n/ui';
+
+const lang = 'af';
+const meta = t(lang).meta;
+const alternates = { en: routes('en').about, af: routes('af').about };
+const aboutLd = [
+  { '@context': 'https://schema.org', '@type': 'AboutPage', name: 'Oor Thryv', url: `${site.url}/af/oor-ons/`, about: { '@id': `${site.url}/#organization` }, inLanguage: 'af-ZA' },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Tuis', item: `${site.url}/af/` },
+      { '@type': 'ListItem', position: 2, name: 'Oor Ons', item: `${site.url}/af/oor-ons/` },
+    ],
+  },
+];
+---
+<Base lang={lang} alternates={alternates} title={meta.aboutTitle} description={meta.aboutDesc} jsonLd={aboutLd}>
+  <About lang={lang} />
+</Base>

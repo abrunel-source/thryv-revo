@@ -1,0 +1,68 @@
+---
+import PageHero from '../PageHero.astro';
+import PostCard from '../PostCard.astro';
+import CtaBand from '../CtaBand.astro';
+import { getAllPosts, getCategories, siloForCategory, categoryLabel, localizePost } from '../../lib/posts';
+import { type Locale, serviceHref, blogHref } from '../../i18n/config';
+import { t } from '../../i18n/ui';
+
+interface Props { lang?: Locale }
+const { lang = 'en' } = Astro.props;
+const d = t(lang).blog;
+const posts = getAllPosts();
+const [featured, ...rest] = posts;
+const categories = getCategories();
+const fLp = localizePost(featured, lang);
+const fCat = categoryLabel(featured.cats?.[0], lang) || (lang === 'af' ? 'Aanbeveel' : 'Featured');
+const fHref = blogHref(lang, featured.slug, featured.af?.slug);
+---
+<PageHero eyebrow={d.heroEyebrow} title={d.heroTitle} text={d.heroText} />
+
+<section class="section">
+  <div class="container">
+    <div class="cat-bar">
+      <span class="pill">{d.all} ({posts.length})</span>
+      {categories.map((c) => {
+        const silo = siloForCategory(c.name);
+        const label = categoryLabel(c.name, lang);
+        return silo
+          ? <a class="cat cat--link" href={serviceHref(lang, silo.service)}>{label} <em>{c.count}</em></a>
+          : <span class="cat">{label} <em>{c.count}</em></span>;
+      })}
+    </div>
+
+    <a href={fHref} class="featured card">
+      <div class="f-cover"><span class="cat-badge">{fCat}</span></div>
+      <div class="f-body">
+        <span class="pill">{d.latest}</span>
+        <h2>{fLp.title}</h2>
+        <p class="muted">{fLp.desc || fLp.excerpt}</p>
+        <span class="learn">{t(lang).common.readArticle}</span>
+      </div>
+    </a>
+
+    <div class="grid grid-3" style="margin-top:2rem">
+      {rest.map((post) => <PostCard post={post} lang={lang} />)}
+    </div>
+  </div>
+</section>
+
+<CtaBand lang={lang} title={d.ctaTitle} text={d.ctaText} />
+
+<style>
+  .cat-bar { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 2.2rem; }
+  .cat { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.8rem; border: 1px solid var(--line); border-radius: var(--radius-pill); font-size: 0.85rem; color: var(--slate); font-family: var(--font-head); font-weight: 600; }
+  .cat em { color: var(--teal-700); font-style: normal; font-size: 0.78rem; }
+  .cat--link { transition: border-color 0.15s, color 0.15s; }
+  .cat--link:hover { border-color: var(--teal-500); color: var(--teal-700); }
+  .featured { display: grid; grid-template-columns: 1fr 1.2fr; padding: 0; overflow: hidden; }
+  .f-cover { background: var(--gradient); position: relative; min-height: 260px; }
+  .f-cover::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 75% 25%, rgba(25,181,168,0.45), transparent 60%); }
+  .cat-badge { position: absolute; left: 18px; bottom: 16px; z-index:1; font-family: var(--font-head); font-weight: 700; font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.9); }
+  .f-body { padding: 2rem; display: flex; flex-direction: column; justify-content: center; }
+  .f-body .pill { align-self: flex-start; margin-bottom: 0.8rem; }
+  .f-body h2 { font-size: clamp(1.4rem, 2.5vw, 1.9rem); margin-bottom: 0.6rem; }
+  .f-body h2 { color: var(--ink); }
+  .learn { color: var(--teal-700); font-family: var(--font-head); font-weight: 600; margin-top: 1rem; }
+  @media (max-width: 760px) { .featured { grid-template-columns: 1fr; } .f-cover { min-height: 160px; } }
+</style>

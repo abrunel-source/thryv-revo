@@ -1,15 +1,20 @@
 ---
 import Base from '../layouts/Base.astro';
+import { routes } from '../i18n/config';
+import { t } from '../i18n/ui';
+const lang = 'en';
+const d = t(lang).notFound;
+const r = routes(lang);
 ---
-<Base title="Page not found" noindex={true}>
+<Base title={d.title} noindex={true} lang={lang}>
   <section class="section text-center" style="padding:6rem 0">
     <div class="container">
       <p class="eyebrow">Error 404</p>
-      <h1>We couldn't find that page</h1>
-      <p class="lead" style="margin-inline:auto;max-width:46ch">The page you're looking for may have moved. Let's get you back on track.</p>
+      <h1>{d.title}</h1>
+      <p class="lead" style="margin-inline:auto;max-width:46ch">{d.text}</p>
       <div style="display:flex;gap:0.8rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem">
-        <a href="/" class="btn btn--primary">Back to home</a>
-        <a href="/blog/" class="btn btn--ghost">Read the blog</a>
+        <a href={r.home} class="btn btn--primary">{d.home}</a>
+        <a href={r.services} class="btn btn--ghost">{d.services}</a>
       </div>
     </div>
   </section>

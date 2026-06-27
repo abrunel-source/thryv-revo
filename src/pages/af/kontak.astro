@@ -1,0 +1,21 @@
+---
+import Base from '../../layouts/Base.astro';
+import ContactPage from '../../components/pages/ContactPage.astro';
+import { site } from '../../data/site';
+import { routes } from '../../i18n/config';
+import { t } from '../../i18n/ui';
+
+const lang = 'af';
+const meta = t(lang).meta;
+const alternates = { en: routes('en').contact, af: routes('af').contact };
+const contactLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ContactPage',
+  name: 'Kontak Thryv — Kleinbesigheidsrekenmeesters in Kaapstad',
+  url: `${site.url}/af/kontak/`,
+  inLanguage: 'af-ZA',
+};
+---
+<Base lang={lang} alternates={alternates} title={meta.contactTitle} description={meta.contactDesc} jsonLd={contactLd}>
+  <ContactPage lang={lang} />
+</Base>

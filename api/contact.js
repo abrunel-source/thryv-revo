@@ -38,13 +38,14 @@ export default async function handler(req, res) {
     return res.status(405).json({ ok: false, error: 'Method not allowed' });
   }
 
+  const data = readBody(req);
+  const back = data.locale === 'af' ? '/af/kontak/' : '/contact/';
+
   const json = wantsJson(req);
   const ok = () =>
-    json ? res.status(200).json({ ok: true }) : res.redirect(303, '/contact/?sent=1');
+    json ? res.status(200).json({ ok: true }) : res.redirect(303, `${back}?sent=1`);
   const fail = (code, msg) =>
-    json ? res.status(code).json({ ok: false, error: msg }) : res.redirect(303, '/contact/?error=1');
-
-  const data = readBody(req);
+    json ? res.status(code).json({ ok: false, error: msg }) : res.redirect(303, `${back}?error=1`);
 
   // --- Bot protection -------------------------------------------------------
   // 1) Honeypot: a hidden field a human never sees. If filled, silently accept

@@ -1,0 +1,37 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import { site } from '../../data/site';
+import { routes } from '../../i18n/config';
+const alternates = { en: routes('en').privacy, af: routes('af').privacy };
+---
+<Base title="Privaatheidsbeleid" description="Hoe Thryv jou persoonlike inligting versamel, gebruik en beskerm." lang="af" alternates={alternates}>
+  <PageHero eyebrow="Wetlik" title="Privaatheidsbeleid" text="Laas opgedateer Junie 2026" />
+  <section class="section">
+    <div class="container" style="max-width:760px">
+      <div class="legal-prose">
+        <p>{site.legalName} ("ons") is daartoe verbind om jou privaatheid te beskerm en jou persoonlike inligting te hanteer in ooreenstemming met die Wet op die Beskerming van Persoonlike Inligting (POPIA).</p>
+        <h2>Inligting wat ons versamel</h2>
+        <p>Ons versamel inligting wat jy direk verskaf — soos jou naam, maatskappy, e-posadres en telefoonnommer wanneer jy ons kontak of 'n kwotasie aanvra — sowel as standaard-analitiese data oor hoe ons webwerf gebruik word.</p>
+        <h2>Hoe ons jou inligting gebruik</h2>
+        <ul>
+          <li>Om op jou navrae te reageer en ons dienste te lewer;</li>
+          <li>Om relevante inligting te stuur wat jy aangevra het;</li>
+          <li>Om aan ons wetlike en regulatoriese verpligtinge te voldoen;</li>
+          <li>Om ons webwerf en dienste te verbeter.</li>
+        </ul>
+        <h2>Deel van jou inligting</h2>
+        <p>Ons verkoop nie jou persoonlike inligting nie. Ons deel dit slegs met betroubare diensverskaffers wat ons help om te bedryf, en waar deur die wet vereis.</p>
+        <h2>Jou regte</h2>
+        <p>Jy kan te eniger tyd toegang tot, regstelling van, of verwydering van jou persoonlike inligting versoek deur 'n e-pos te stuur aan <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+        <h2>Kontak</h2>
+        <p>Vir enige privaatheidsvrae, kontak ons by <a href={`mailto:${site.email}`}>{site.email}</a> of {site.phoneDisplay}.</p>
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  .legal-prose h2 { font-size: 1.4rem; margin: 2rem 0 0.6rem; }
+  .legal-prose ul { padding-left: 1.3rem; }
+  .legal-prose li { margin-bottom: 0.5rem; }
+</style>

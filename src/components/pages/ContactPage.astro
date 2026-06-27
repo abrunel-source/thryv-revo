@@ -1,0 +1,144 @@
+---
+import Icon from '../Icon.astro';
+import { site } from '../../data/site';
+import { type Locale, routes } from '../../i18n/config';
+import { t } from '../../i18n/ui';
+
+interface Props { lang?: Locale }
+const { lang = 'en' } = Astro.props;
+const c = t(lang).contact;
+const r = routes(lang);
+---
+<section class="contact-hero">
+  <div class="container grid-wrap">
+    <div class="intro">
+      <span class="eyebrow">{c.eyebrow}</span>
+      <h1>{c.title}</h1>
+      <p class="lead">{c.lead}</p>
+
+      <ul class="contact-list">
+        <li><span class="ci"><Icon name="phone" /></span><div><strong>{c.callUs}</strong><a href={site.phoneHref}>{site.phoneDisplay}</a></div></li>
+        <li><span class="ci"><Icon name="mail" /></span><div><strong>{c.email}</strong><a href={`mailto:${site.email}`}>{site.email}</a></div></li>
+        <li><span class="ci"><Icon name="pin" /></span><div><strong>{c.offices}</strong><span>{site.locations.join(' & ')}, South Africa</span></div></li>
+        <li><span class="ci"><Icon name="clock" /></span><div><strong>{c.hours}</strong><span>{c.hoursVal}</span></div></li>
+      </ul>
+
+      <div class="socials">
+        <a href={site.social.facebook} aria-label="Thryv on Facebook" rel="noopener" target="_blank"><Icon name="facebook" /></a>
+        <a href={site.social.linkedin} aria-label="Thryv on LinkedIn" rel="noopener" target="_blank"><Icon name="linkedin" /></a>
+        <a href={site.social.twitter} aria-label="Thryv on Twitter" rel="noopener" target="_blank"><Icon name="twitter" /></a>
+      </div>
+    </div>
+
+    <div class="form-card card">
+      <h2>{c.formTitle}</h2>
+      <p class="muted">{c.formIntro}</p>
+      <div
+        class="form-status" id="form-status" role="status" hidden
+        data-ok={c.okMsg} data-err={c.errMsg} data-net={c.netErr}></div>
+      <form action="/api/contact" method="POST" class="form" id="contact-form" data-sending={c.sending}>
+        <div class="hp" aria-hidden="true">
+          <label>{c.hp}<input type="text" name="company_website" tabindex="-1" autocomplete="off" /></label>
+        </div>
+        <input type="hidden" name="form_ts" id="form-ts" value="" />
+        <input type="hidden" name="locale" value={lang} />
+        <div class="row">
+          <label>{c.fName}<input type="text" name="name" autocomplete="name" required placeholder={c.fNamePh} /></label>
+          <label>{c.fCompany}<input type="text" name="company" autocomplete="organization" placeholder={c.fCompanyPh} /></label>
+        </div>
+        <div class="row">
+          <label>{c.fEmail}<input type="email" name="email" autocomplete="email" required placeholder="you@company.co.za" /></label>
+          <label>{c.fPhone}<input type="tel" name="phone" autocomplete="tel" placeholder="+27 …" /></label>
+        </div>
+        <label>{c.fService}
+          <select name="service">
+            {c.serviceOptions.map((o) => <option>{o}</option>)}
+          </select>
+        </label>
+        <label>{c.fMessage}<textarea name="message" rows="4" placeholder={c.fMessagePh}></textarea></label>
+        <button type="submit" class="btn btn--primary submit">{c.submit} <Icon name="arrow" class="ic" /></button>
+        <p class="form-note">{c.notePre}<a href={r.privacy}>{c.noteLink}</a>.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  (function () {
+    var form = document.getElementById('contact-form');
+    var status = document.getElementById('form-status');
+    var ts = document.getElementById('form-ts');
+    if (ts) ts.value = String(Date.now());
+    function show(kind, msg) {
+      if (!status) return;
+      status.hidden = false;
+      status.className = 'form-status ' + (kind === 'ok' ? 'is-ok' : 'is-err');
+      status.textContent = msg;
+    }
+    var okMsg = status ? status.getAttribute('data-ok') : '';
+    var errMsg = status ? status.getAttribute('data-err') : '';
+    var netMsg = status ? status.getAttribute('data-net') : '';
+    var params = new URLSearchParams(location.search);
+    if (params.get('sent') === '1') show('ok', okMsg);
+    else if (params.get('error') === '1') show('err', errMsg);
+    if (!form) return;
+    var sending = form.getAttribute('data-sending') || 'Sending…';
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var btn = form.querySelector('button[type=submit]');
+      if (btn) { btn.disabled = true; btn.dataset.label = btn.innerHTML; btn.textContent = sending; }
+      var body = new URLSearchParams(new FormData(form));
+      fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'fetch', Accept: 'application/json' },
+        body: body,
+      })
+        .then(function (rsp) { return rsp.json().catch(function () { return { ok: rsp.ok }; }); })
+        .then(function (d) {
+          if (d && d.ok) {
+            form.reset();
+            if (ts) ts.value = String(Date.now());
+            show('ok', okMsg);
+          } else { show('err', (d && d.error) || errMsg); }
+        })
+        .catch(function () { show('err', netMsg); })
+        .finally(function () { if (btn) { btn.disabled = false; btn.innerHTML = btn.dataset.label || ''; } });
+    });
+  })();
+</script>
+
+<style>
+  .contact-hero { padding: clamp(2.5rem, 6vw, 4rem) 0; background: var(--bg-soft); }
+  .grid-wrap { display: grid; grid-template-columns: 1fr 1.05fr; gap: 3rem; align-items: start; }
+  .contact-list { list-style: none; margin: 2rem 0; padding: 0; display: grid; gap: 1.1rem; }
+  .contact-list li { display: flex; gap: 1rem; align-items: center; }
+  .ci { width: 46px; height: 46px; border-radius: 12px; background: var(--bg-mint); color: var(--teal-700); display: grid; place-items: center; flex: none; }
+  .ci :global(svg) { width: 20px; height: 20px; }
+  .contact-list strong { display: block; font-family: var(--font-head); color: var(--ink); font-size: 0.9rem; }
+  .contact-list a, .contact-list span { color: var(--ink-700); }
+  .socials { display: flex; gap: 0.6rem; }
+  .socials a { width: 42px; height: 42px; border-radius: 11px; display: grid; place-items: center; background: #fff; border: 1px solid var(--line); color: var(--teal-700); }
+  .socials a:hover { background: var(--teal-600); color: #fff; }
+  .socials :global(svg) { width: 19px; height: 19px; }
+
+  .form-card { box-shadow: var(--shadow-lg); }
+  .form-card h2 { font-size: 1.5rem; margin-bottom: 0.3rem; }
+  .form { display: grid; gap: 1rem; margin-top: 1.4rem; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  label { font-family: var(--font-head); font-weight: 600; font-size: 0.88rem; color: var(--ink); display: grid; gap: 0.4rem; }
+  input, select, textarea {
+    font-family: var(--font-body); font-size: 1rem; font-weight: 400; color: var(--ink-700);
+    padding: 0.7rem 0.85rem; border: 1.5px solid var(--line-strong); border-radius: 10px; background: #fff; width: 100%;
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--teal-500); box-shadow: 0 0 0 3px rgba(16,156,146,0.15); }
+  textarea { resize: vertical; }
+  .submit { justify-content: center; margin-top: 0.4rem; }
+  .ic { width: 18px; height: 18px; }
+  .form-note { font-size: 0.82rem; color: var(--slate); margin: 0; font-weight: 400; font-family: var(--font-body); }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .form-status { border-radius: 10px; padding: 0.85rem 1rem; margin-top: 1rem; font-size: 0.92rem; font-family: var(--font-head); font-weight: 600; }
+  .form-status.is-ok { background: var(--bg-mint); color: var(--teal-700); border: 1px solid var(--teal-500); }
+  .form-status.is-err { background: #fdecea; color: #a8331f; border: 1px solid #f0b4aa; }
+  @media (max-width: 860px) { .grid-wrap { grid-template-columns: 1fr; } }
+  @media (max-width: 480px) { .row { grid-template-columns: 1fr; } }
+</style>

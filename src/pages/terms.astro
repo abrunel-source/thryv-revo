@@ -2,8 +2,10 @@
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import { site } from '../data/site';
+import { routes } from '../i18n/config';
+const alternates = { en: routes('en').terms, af: routes('af').terms };
 ---
-<Base title="Terms of Use" description="The terms governing your use of the Thryv website.">
+<Base title="Terms of Use" description="The terms governing your use of the Thryv website." lang="en" alternates={alternates}>
   <PageHero eyebrow="Legal" title="Terms of Use" text="Last updated June 2026" />
   <section class="section">
     <div class="container" style="max-width:760px">

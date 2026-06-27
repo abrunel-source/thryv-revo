@@ -2,8 +2,10 @@
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import { site } from '../data/site';
+import { routes } from '../i18n/config';
+const alternates = { en: routes('en').privacy, af: routes('af').privacy };
 ---
-<Base title="Privacy Policy" description="How Thryv collects, uses and protects your personal information." noindex={false}>
+<Base title="Privacy Policy" description="How Thryv collects, uses and protects your personal information." lang="en" alternates={alternates}>
   <PageHero eyebrow="Legal" title="Privacy Policy" text="Last updated June 2026" />
   <section class="section">
     <div class="container" style="max-width:760px">

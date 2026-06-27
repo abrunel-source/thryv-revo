@@ -1,0 +1,28 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import { site } from '../../data/site';
+import { routes } from '../../i18n/config';
+const alternates = { en: routes('en').terms, af: routes('af').terms };
+---
+<Base title="Diensbepalings" description="Die bepalings wat jou gebruik van die Thryv-webwerf reguleer." lang="af" alternates={alternates}>
+  <PageHero eyebrow="Wetlik" title="Diensbepalings" text="Laas opgedateer Junie 2026" />
+  <section class="section">
+    <div class="container" style="max-width:760px">
+      <div class="legal-prose">
+        <p>Deur hierdie webwerf te besoek en te gebruik, aanvaar jy hierdie diensbepalings ten volle.</p>
+        <h2>Gebruik van die webwerf</h2>
+        <p>Die inhoud op hierdie webwerf word verskaf vir algemene inligting oor {site.legalName} en sy dienste. Dit vorm nie professionele, finansiële of belastingadvies nie. Jy behoort spesifieke advies te bekom voordat jy op enigiets hierin handel.</p>
+        <h2>Intellektuele eiendom</h2>
+        <p>Alle inhoud, handelsmerke en materiaal op hierdie webwerf behoort aan {site.legalName} tensy anders vermeld, en mag nie sonder toestemming gereproduseer word nie.</p>
+        <h2>Beperking van aanspreeklikheid</h2>
+        <p>Hoewel ons sorg dra om inligting akkuraat en op datum te hou, gee ons geen waarborge nie en aanvaar ons geen aanspreeklikheid vir enige verlies wat voortspruit uit vertroue op die inhoud van hierdie webwerf nie.</p>
+        <h2>Kontak</h2>
+        <p>Vrae oor hierdie bepalings? E-pos <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  .legal-prose h2 { font-size: 1.4rem; margin: 2rem 0 0.6rem; }
+</style>
