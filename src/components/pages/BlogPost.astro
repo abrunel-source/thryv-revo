@@ -1,0 +1,117 @@
+---
+import PostCard from '../PostCard.astro';
+import CtaBand from '../CtaBand.astro';
+import Icon from '../Icon.astro';
+import { site } from '../../data/site';
+import type { Post } from '../../lib/posts';
+import { getRelated, getSilo, rewriteLinks, autoLinkServices, readingTime, formatDate, localizePost, categoryLabel, getAfSlugMap } from '../../lib/posts';
+import { type Locale, routes, serviceHref, blogHref, localizeLinks } from '../../i18n/config';
+import { t } from '../../i18n/ui';
+import { getServices } from '../../i18n/content';
+
+interface Props { post: Post; lang?: Locale }
+const { post, lang = 'en' } = Astro.props;
+const dict = t(lang);
+const p = t(lang).post;
+const r = routes(lang);
+const lp = localizePost(post, lang);
+
+const rewritten = rewriteLinks(lp.html);
+const html = lang === 'af' ? localizeLinks(rewritten, 'af', getAfSlugMap()) : autoLinkServices(rewritten);
+
+const related = getRelated(post);
+const cat = categoryLabel(post.cats?.[0], lang);
+const silo = getSilo(post);
+const siloService = getServices(lang).find((x) => x.enSlug === silo.service)!;
+const shareUrl = new URL(blogHref(lang, post.slug, post.af?.slug), site.url).href;
+---
+<article>
+  <header class="post-hero">
+    <div class="container narrow">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href={r.home}>{dict.common.home}</a> <span>/</span> <a href={r.blog}>{dict.nav.blog}</a> <span>/</span> <span aria-current="page">{cat}</span>
+      </nav>
+      <h1>{lp.title}</h1>
+      <div class="post-meta">
+        {cat && <span class="pill">{cat}</span>}
+        <span><Icon name="clock" class="mi" /> {readingTime(lp.html)} {dict.common.minRead}</span>
+        <span><time datetime={post.date}>{formatDate(post.date, lang)}</time></span>
+      </div>
+    </div>
+  </header>
+
+  <div class="container narrow">
+    <div class="prose" set:html={html} />
+
+    <aside class="svc-callout">
+      <div>
+        <span class="sc-eyebrow">{silo.label}</span>
+        <h3>{p.calloutTitle}</h3>
+        <p>{p.helpPre} {siloService.title.toLowerCase()} {p.helpMid} {siloService.summary}</p>
+      </div>
+      <a href={serviceHref(lang, silo.service)} class="btn btn--primary">{p.explore} {siloService.title}</a>
+    </aside>
+
+    <div class="share">
+      <span>{p.share}</span>
+      <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`} target="_blank" rel="noopener" aria-label="LinkedIn"><Icon name="linkedin" /></a>
+      <a href={`https://twitter.com/intent/tweet?url=${shareUrl}&text=${encodeURIComponent(lp.title)}`} target="_blank" rel="noopener" aria-label="Twitter"><Icon name="twitter" /></a>
+      <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`} target="_blank" rel="noopener" aria-label="Facebook"><Icon name="facebook" /></a>
+    </div>
+  </div>
+</article>
+
+{related.length > 0 && (
+  <section class="section section--soft">
+    <div class="container">
+      <div class="section-head"><span class="eyebrow">{p.keepReading}</span><h2>{p.related}</h2></div>
+      <div class="grid grid-3">{related.map((rp) => <PostCard post={rp} lang={lang} />)}</div>
+    </div>
+  </section>
+)}
+
+<CtaBand lang={lang} title={p.ctaTitle} text={p.ctaText} />
+
+<style>
+  .narrow { max-width: 760px; }
+  .post-hero { background: var(--bg-soft); padding: clamp(2rem, 5vw, 3.2rem) 0 2rem; border-bottom: 1px solid var(--line); }
+  .crumbs { font-size: 0.85rem; color: var(--slate); margin-bottom: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .crumbs span[aria-current] { color: var(--ink-700); }
+  .post-hero h1 { font-size: clamp(1.9rem, 4vw, 2.8rem); }
+  .post-meta { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; color: var(--slate); font-size: 0.9rem; margin-top: 1rem; }
+  .post-meta span { display: inline-flex; align-items: center; gap: 0.4rem; }
+  .mi { width: 16px; height: 16px; }
+
+  .prose { padding: 2.6rem 0 1.5rem; font-size: 1.08rem; line-height: 1.75; color: var(--ink-700); }
+  .prose :global(h2) { font-size: 1.6rem; margin: 2.2rem 0 0.8rem; }
+  .prose :global(h3) { font-size: 1.28rem; margin: 1.8rem 0 0.6rem; }
+  .prose :global(h4) { font-size: 1.1rem; margin: 1.4rem 0 0.5rem; }
+  .prose :global(p) { margin: 0 0 1.2rem; }
+  .prose :global(ul), .prose :global(ol) { margin: 0 0 1.2rem; padding-left: 1.3rem; }
+  .prose :global(li) { margin-bottom: 0.5rem; }
+  .prose :global(a) { color: var(--teal-700); text-decoration: underline; text-underline-offset: 2px; }
+  .prose :global(a:hover) { color: var(--teal-600); }
+  .prose :global(img) { border-radius: var(--radius); margin: 1.5rem 0; }
+  .prose :global(figure) { margin: 1.5rem 0; }
+  .prose :global(blockquote) { margin: 1.5rem 0; padding: 0.6rem 0 0.6rem 1.4rem; border-left: 4px solid var(--teal-500); color: var(--ink); font-size: 1.15rem; }
+  .prose :global(table) { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+  .prose :global(th), .prose :global(td) { border: 1px solid var(--line); padding: 0.6rem 0.8rem; text-align: left; }
+  .prose :global(th) { background: var(--bg-soft); font-family: var(--font-head); }
+  .prose :global(strong) { color: var(--ink); }
+  .prose :global(h2:first-child), .prose :global(h3:first-child) { margin-top: 0; }
+
+  .svc-callout {
+    display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap;
+    background: var(--bg-mint); border: 1px solid var(--line); border-radius: var(--radius-lg);
+    padding: 1.6rem 1.8rem; margin: 1rem 0 2rem;
+  }
+  .svc-callout .sc-eyebrow { font-family: var(--font-head); font-weight: 700; font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--teal-600); }
+  .svc-callout h3 { font-size: 1.25rem; margin: 0.2rem 0 0.4rem; color: var(--ink); }
+  .svc-callout p { margin: 0; color: var(--ink-700); font-size: 0.96rem; max-width: 52ch; }
+  .svc-callout .btn { flex: none; }
+
+  .share { display: flex; align-items: center; gap: 0.7rem; padding: 1.5rem 0 2.5rem; border-top: 1px solid var(--line); color: var(--slate); font-family: var(--font-head); font-weight: 600; font-size: 0.9rem; }
+  .share a { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; background: var(--bg-mint); color: var(--teal-700); }
+  .share a:hover { background: var(--teal-600); color: #fff; }
+  .share :global(svg) { width: 18px; height: 18px; }
+</style>

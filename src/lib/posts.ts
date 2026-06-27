@@ -115,6 +115,13 @@ export function getPostByAfSlug(slug: string): Post | undefined {
   return allPosts.find((p) => (p.af?.slug ?? p.slug) === slug);
 }
 
+/** Map of English slug -> Afrikaans slug, for localising in-body /blog/ links. */
+export function getAfSlugMap(): Record<string, string> {
+  const m: Record<string, string> = {};
+  for (const p of allPosts) m[p.slug] = p.af?.slug ?? p.slug;
+  return m;
+}
+
 export function getAllPosts(): Post[] {
   return allPosts
     .slice()
