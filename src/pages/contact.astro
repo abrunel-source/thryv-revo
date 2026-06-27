@@ -39,12 +39,13 @@ const contactLd = {
       <div class="form-card card">
         <h2>Request a quote</h2>
         <p class="muted">Tell us a little about your business and we'll be in touch within one business day.</p>
-        <!--
-          FORM SETUP: this posts to Formspree. Replace YOUR_FORM_ID with your
-          endpoint (formspree.io) — or point `action` at any form handler /
-          Vercel serverless function. The fields below are ready to go.
-        -->
-        <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST" class="form">
+        <div class="form-status" id="form-status" role="status" hidden></div>
+        <form action="/api/contact" method="POST" class="form" id="contact-form">
+          <!-- Honeypot: hidden from humans; bots that fill it are silently dropped. -->
+          <div class="hp" aria-hidden="true">
+            <label>Company website<input type="text" name="company_website" tabindex="-1" autocomplete="off" /></label>
+          </div>
+          <input type="hidden" name="form_ts" id="form-ts" value="" />
           <div class="row">
             <label>Full name<input type="text" name="name" autocomplete="name" required placeholder="Your name" /></label>
             <label>Company<input type="text" name="company" autocomplete="organization" placeholder="Company name" /></label>
@@ -71,6 +72,56 @@ const contactLd = {
       </div>
     </div>
   </section>
+
+  <script is:inline>
+    (function () {
+      var form = document.getElementById('contact-form');
+      var status = document.getElementById('form-status');
+      var ts = document.getElementById('form-ts');
+      if (ts) ts.value = String(Date.now());
+
+      function show(kind, msg) {
+        if (!status) return;
+        status.hidden = false;
+        status.className = 'form-status ' + (kind === 'ok' ? 'is-ok' : 'is-err');
+        status.textContent = msg;
+      }
+
+      // No-JS fallback: the server redirects to ?sent=1 / ?error=1 after POST.
+      var params = new URLSearchParams(location.search);
+      if (params.get('sent') === '1') show('ok', 'Thanks — your message is on its way. We’ll be in touch within one business day.');
+      else if (params.get('error') === '1') show('err', 'Sorry, something went wrong. Please try again or email admin@thryv.co.za.');
+
+      if (!form) return;
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var btn = form.querySelector('button[type=submit]');
+        if (btn) { btn.disabled = true; btn.dataset.label = btn.innerHTML; btn.textContent = 'Sending…'; }
+        var body = new URLSearchParams(new FormData(form));
+        fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'fetch', Accept: 'application/json' },
+          body: body,
+        })
+          .then(function (r) { return r.json().catch(function () { return { ok: r.ok }; }); })
+          .then(function (d) {
+            if (d && d.ok) {
+              form.reset();
+              if (ts) ts.value = String(Date.now());
+              show('ok', 'Thanks — your message is on its way. We’ll be in touch within one business day.');
+            } else {
+              show('err', (d && d.error) || 'Sorry, something went wrong. Please try again or email admin@thryv.co.za.');
+            }
+          })
+          .catch(function () {
+            show('err', 'Network error. Please try again or email admin@thryv.co.za.');
+          })
+          .finally(function () {
+            if (btn) { btn.disabled = false; btn.innerHTML = btn.dataset.label || 'Send my request'; }
+          });
+      });
+    })();
+  </script>
 </Base>
 
 <style>
@@ -101,6 +152,11 @@ const contactLd = {
   .submit { justify-content: center; margin-top: 0.4rem; }
   .ic { width: 18px; height: 18px; }
   .form-note { font-size: 0.82rem; color: var(--slate); margin: 0; font-weight: 400; font-family: var(--font-body); }
+  /* Honeypot — visually & semantically hidden, but still in the DOM for bots. */
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .form-status { border-radius: 10px; padding: 0.85rem 1rem; margin-top: 1rem; font-size: 0.92rem; font-family: var(--font-head); font-weight: 600; }
+  .form-status.is-ok { background: var(--bg-mint); color: var(--teal-700); border: 1px solid var(--teal-500); }
+  .form-status.is-err { background: #fdecea; color: #a8331f; border: 1px solid #f0b4aa; }
   @media (max-width: 860px) { .grid-wrap { grid-template-columns: 1fr; } }
   @media (max-width: 480px) { .row { grid-template-columns: 1fr; } }
 </style>
