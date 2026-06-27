@@ -1,0 +1,46 @@
+---
+import type { Post } from '../lib/posts';
+import { formatDate, readingTime } from '../lib/posts';
+interface Props { post: Post }
+const { post } = Astro.props;
+const cat = post.cats?.[0];
+---
+<article class="post-card card">
+  <a href={`/blog/${post.slug}/`} class="cover" aria-hidden="true" tabindex="-1">
+    <span class="cat-badge">{cat ?? 'Insights'}</span>
+  </a>
+  <div class="body">
+    {cat && <span class="pill">{cat}</span>}
+    <h3><a href={`/blog/${post.slug}/`}>{post.title}</a></h3>
+    <p class="muted excerpt">{post.desc || post.excerpt}</p>
+    <div class="meta">
+      <time datetime={post.date}>{formatDate(post.date)}</time>
+      <span>·</span>
+      <span>{readingTime(post.html)} min read</span>
+    </div>
+  </div>
+</article>
+
+<style>
+  .post-card { padding: 0; overflow: hidden; display: flex; flex-direction: column; }
+  .cover {
+    display: block; height: 130px; position: relative;
+    background: var(--gradient);
+  }
+  .cover::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 80% 20%, rgba(25,181,168,0.5), transparent 60%);
+  }
+  .cat-badge {
+    position: absolute; left: 14px; bottom: 12px; z-index: 1;
+    font-family: var(--font-head); font-weight: 700; font-size: 0.72rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: rgba(255,255,255,0.85);
+  }
+  .body { padding: 1.4rem 1.5rem 1.6rem; display: flex; flex-direction: column; flex: 1; }
+  .body .pill { align-self: flex-start; margin-bottom: 0.7rem; }
+  h3 { font-size: 1.16rem; margin-bottom: 0.5rem; }
+  h3 a { color: var(--ink); }
+  h3 a:hover { color: var(--teal-700); }
+  .excerpt { font-size: 0.95rem; flex: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .meta { display: flex; gap: 0.5rem; align-items: center; font-size: 0.85rem; color: var(--slate); margin-top: 1rem; }
+</style>

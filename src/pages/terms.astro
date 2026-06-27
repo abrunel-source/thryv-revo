@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { site } from '../data/site';
+---
+<Base title="Terms of Use" description="The terms governing your use of the Thryv website.">
+  <PageHero eyebrow="Legal" title="Terms of Use" text="Last updated June 2026" />
+  <section class="section">
+    <div class="container" style="max-width:760px">
+      <div class="legal-prose">
+        <p>By accessing and using this website you accept these terms of use in full.</p>
+        <h2>Use of the website</h2>
+        <p>The content on this website is provided for general information about {site.legalName} and its services. It does not constitute professional, financial or tax advice. You should obtain specific advice before acting on anything contained here.</p>
+        <h2>Intellectual property</h2>
+        <p>All content, branding and materials on this website are owned by {site.legalName} unless otherwise stated, and may not be reproduced without permission.</p>
+        <h2>Limitation of liability</h2>
+        <p>While we take care to keep information accurate and current, we make no warranties and accept no liability for any loss arising from reliance on the content of this website.</p>
+        <h2>Contact</h2>
+        <p>Questions about these terms? Email <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  .legal-prose h2 { font-size: 1.4rem; margin: 2rem 0 0.6rem; }
+</style>

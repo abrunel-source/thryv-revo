@@ -1,0 +1,70 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
+import { services, packages, currency } from '../../data/site';
+---
+<Base
+  title="Services — Accounting, tax, payroll & advisory"
+  description="Explore Thryv's full range of services for South African businesses: accounting, bookkeeping, tax, payroll, audit, independent review, company secretary and advisory."
+>
+  <PageHero
+    eyebrow="Our services"
+    title="A complete finance function for your business"
+    text="From everyday bookkeeping to audits and strategic advisory — delivered by chartered accountants, for one fixed monthly fee."
+  />
+
+  <section class="section">
+    <div class="container">
+      <div class="grid grid-3">
+        {services.map((s) => (
+          <a href={`/services/${s.slug}/`} class="card service-card">
+            <div class="icon-chip"><Icon name={s.icon} /></div>
+            <span class="tagline">{s.tagline}</span>
+            <h3>{s.title}</h3>
+            <p class="muted">{s.summary}</p>
+            <span class="learn">Learn more <Icon name="arrow" class="ic" /></span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--soft">
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow">Simple pricing</span>
+        <h2>Monthly accounting packages</h2>
+        <p class="lead">Most services are bundled into one fixed monthly fee.</p>
+      </div>
+      <div class="grid grid-3 mini-pricing">
+        {packages.map((p) => (
+          <div class={`card mini${p.best ? ' mini--best' : ''}`}>
+            <h3>{p.name}</h3>
+            <div class="price"><span>{currency}</span>{p.price.toLocaleString('en-ZA')}<small>/mo</small></div>
+            <p class="muted">{p.blurb}</p>
+            <a href="/contact/" class={`btn ${p.best ? 'btn--primary' : 'btn--ghost'}`}>Get started</a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style>
+  .service-card { display: flex; flex-direction: column; }
+  .service-card h3 { color: var(--ink); margin-bottom: 0.4rem; }
+  .tagline { font-family: var(--font-head); font-weight: 700; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--teal-600); margin-bottom: 0.5rem; }
+  .service-card .muted { flex: 1; font-size: 0.96rem; }
+  .learn { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--teal-700); font-family: var(--font-head); font-weight: 600; font-size: 0.92rem; margin-top: 1rem; }
+  .ic { width: 18px; height: 18px; }
+  .mini { text-align: center; }
+  .mini--best { border-color: var(--teal-500); box-shadow: var(--shadow); }
+  .mini .price { font-family: var(--font-head); font-weight: 800; font-size: 2rem; color: var(--ink); margin: 0.3rem 0 0.4rem; }
+  .mini .price span { font-size: 1rem; vertical-align: super; }
+  .mini .price small { font-size: 0.85rem; color: var(--slate); font-weight: 600; }
+  .mini .btn { margin-top: 0.8rem; justify-content: center; width: 100%; }
+</style>

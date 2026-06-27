@@ -1,0 +1,91 @@
+---
+import { site, nav } from '../data/site';
+import Icon from './Icon.astro';
+---
+<header class="site-header">
+  <div class="container bar">
+    <a href="/" class="brand" aria-label={`${site.name} home`}>
+      <img src={site.logo} alt={`${site.legalName} logo`} width="120" height="49" />
+    </a>
+
+    <nav class="primary" aria-label="Primary">
+      {nav.map((n) => <a href={n.href}>{n.label}</a>)}
+    </nav>
+
+    <div class="actions">
+      <a href={site.phoneHref} class="phone">
+        <Icon name="phone" class="ic" /> {site.phoneDisplay}
+      </a>
+      <a href="/contact/" class="btn btn--primary">Get a quote</a>
+    </div>
+
+    <button class="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <nav id="mobile-nav" class="mobile" aria-label="Mobile" hidden>
+    {nav.map((n) => <a href={n.href}>{n.label}</a>)}
+    <a href={site.phoneHref} class="m-phone"><Icon name="phone" class="ic" /> {site.phoneDisplay}</a>
+    <a href="/contact/" class="btn btn--primary">Get a quote</a>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255, 255, 255, 0.86);
+    backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .bar { display: flex; align-items: center; gap: 1.5rem; height: 72px; }
+  .brand { display: flex; align-items: center; }
+  .brand img { height: 38px; width: auto; }
+  .primary { display: flex; gap: 1.6rem; margin-left: auto; }
+  .primary a {
+    font-family: var(--font-head); font-weight: 600; font-size: 0.97rem;
+    color: var(--ink-700); padding: 0.4rem 0;
+  }
+  .primary a:hover { color: var(--teal-700); }
+  .actions { display: flex; align-items: center; gap: 1rem; }
+  .phone {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    font-family: var(--font-head); font-weight: 600; font-size: 0.92rem; color: var(--ink);
+  }
+  .phone:hover { color: var(--teal-700); }
+  .ic { width: 17px; height: 17px; }
+
+  .burger {
+    display: none; flex-direction: column; gap: 5px; background: none; border: 0;
+    padding: 8px; cursor: pointer; margin-left: auto;
+  }
+  .burger span { width: 24px; height: 2px; background: var(--ink); border-radius: 2px; transition: 0.2s; }
+  .burger[aria-expanded='true'] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .burger[aria-expanded='true'] span:nth-child(2) { opacity: 0; }
+  .burger[aria-expanded='true'] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .mobile {
+    display: none; flex-direction: column; gap: 0.4rem;
+    padding: 1rem 22px 1.6rem; border-top: 1px solid var(--line); background: #fff;
+  }
+  .mobile:not([hidden]) { display: flex; }
+  .mobile a { font-family: var(--font-head); font-weight: 600; padding: 0.7rem 0; color: var(--ink-700); border-bottom: 1px solid var(--line); }
+  .mobile .btn { justify-content: center; margin-top: 0.6rem; border-bottom: 0; color: #fff; }
+  .mobile .m-phone { display: inline-flex; align-items: center; gap: 0.5rem; }
+
+  @media (max-width: 940px) {
+    .primary, .actions { display: none; }
+    .burger { display: flex; }
+  }
+</style>
+
+<script>
+  const burger = document.querySelector('.burger');
+  const menu = document.getElementById('mobile-nav');
+  burger?.addEventListener('click', () => {
+    const open = burger.getAttribute('aria-expanded') === 'true';
+    burger.setAttribute('aria-expanded', String(!open));
+    burger.setAttribute('aria-label', open ? 'Open menu' : 'Close menu');
+    if (menu) menu.hidden = open;
+  });
+</script>

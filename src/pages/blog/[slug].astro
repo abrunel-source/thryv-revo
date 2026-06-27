@@ -1,0 +1,113 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
+import { site } from '../../data/site';
+import { getAllPosts, getPost, getRelated, rewriteLinks, readingTime, formatDate } from '../../lib/posts';
+
+export function getStaticPaths() {
+  return getAllPosts().map((p) => ({ params: { slug: p.slug } }));
+}
+
+const { slug } = Astro.params;
+const post = getPost(slug!)!;
+const html = rewriteLinks(post.html);
+const related = getRelated(post);
+const cat = post.cats?.[0];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.title,
+  description: post.desc || post.excerpt,
+  datePublished: post.date,
+  dateModified: post.modified || post.date,
+  author: { '@type': 'Organization', name: site.legalName },
+  publisher: { '@type': 'Organization', name: site.legalName, logo: { '@type': 'ImageObject', url: new URL(site.logo, site.url).href } },
+  mainEntityOfPage: new URL(`/blog/${post.slug}/`, site.url).href,
+  articleSection: cat,
+};
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: site.url + '/' },
+    { '@type': 'ListItem', position: 2, name: 'Blog', item: site.url + '/blog/' },
+    { '@type': 'ListItem', position: 3, name: post.title, item: new URL(`/blog/${post.slug}/`, site.url).href },
+  ],
+};
+---
+<Base title={post.title} description={post.desc || post.excerpt} jsonLd={[jsonLd, breadcrumb]}>
+  <article>
+    <header class="post-hero">
+      <div class="container narrow">
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <a href="/">Home</a> <span>/</span> <a href="/blog/">Blog</a> <span>/</span> <span aria-current="page">{cat}</span>
+        </nav>
+        <h1>{post.title}</h1>
+        <div class="post-meta">
+          {cat && <span class="pill">{cat}</span>}
+          <span><Icon name="clock" class="mi" /> {readingTime(post.html)} min read</span>
+          <span><time datetime={post.date}>{formatDate(post.date)}</time></span>
+        </div>
+      </div>
+    </header>
+
+    <div class="container narrow">
+      <div class="prose" set:html={html} />
+
+      <div class="share">
+        <span>Share:</span>
+        <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${site.url}/blog/${post.slug}/`} target="_blank" rel="noopener" aria-label="Share on LinkedIn"><Icon name="linkedin" /></a>
+        <a href={`https://twitter.com/intent/tweet?url=${site.url}/blog/${post.slug}/&text=${encodeURIComponent(post.title)}`} target="_blank" rel="noopener" aria-label="Share on Twitter"><Icon name="twitter" /></a>
+        <a href={`https://www.facebook.com/sharer/sharer.php?u=${site.url}/blog/${post.slug}/`} target="_blank" rel="noopener" aria-label="Share on Facebook"><Icon name="facebook" /></a>
+      </div>
+    </div>
+  </article>
+
+  {related.length > 0 && (
+    <section class="section section--soft">
+      <div class="container">
+        <div class="section-head"><span class="eyebrow">Keep reading</span><h2>Related articles</h2></div>
+        <div class="grid grid-3">{related.map((p) => <PostCard post={p} />)}</div>
+      </div>
+    </section>
+  )}
+
+  <CtaBand title="Need help applying this to your business?" text="Book a free call with a chartered accountant and get advice tailored to your situation." />
+</Base>
+
+<style>
+  .narrow { max-width: 760px; }
+  .post-hero { background: var(--bg-soft); padding: clamp(2rem, 5vw, 3.2rem) 0 2rem; border-bottom: 1px solid var(--line); }
+  .crumbs { font-size: 0.85rem; color: var(--slate); margin-bottom: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .crumbs span[aria-current] { color: var(--ink-700); }
+  .post-hero h1 { font-size: clamp(1.9rem, 4vw, 2.8rem); }
+  .post-meta { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; color: var(--slate); font-size: 0.9rem; margin-top: 1rem; }
+  .post-meta span { display: inline-flex; align-items: center; gap: 0.4rem; }
+  .mi { width: 16px; height: 16px; }
+
+  .prose { padding: 2.6rem 0 1.5rem; font-size: 1.08rem; line-height: 1.75; color: var(--ink-700); }
+  .prose :global(h2) { font-size: 1.6rem; margin: 2.2rem 0 0.8rem; }
+  .prose :global(h3) { font-size: 1.28rem; margin: 1.8rem 0 0.6rem; }
+  .prose :global(h4) { font-size: 1.1rem; margin: 1.4rem 0 0.5rem; }
+  .prose :global(p) { margin: 0 0 1.2rem; }
+  .prose :global(ul), .prose :global(ol) { margin: 0 0 1.2rem; padding-left: 1.3rem; }
+  .prose :global(li) { margin-bottom: 0.5rem; }
+  .prose :global(a) { color: var(--teal-700); text-decoration: underline; text-underline-offset: 2px; }
+  .prose :global(a:hover) { color: var(--teal-600); }
+  .prose :global(img) { border-radius: var(--radius); margin: 1.5rem 0; }
+  .prose :global(figure) { margin: 1.5rem 0; }
+  .prose :global(blockquote) { margin: 1.5rem 0; padding: 0.6rem 0 0.6rem 1.4rem; border-left: 4px solid var(--teal-500); color: var(--ink); font-size: 1.15rem; }
+  .prose :global(table) { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+  .prose :global(th), .prose :global(td) { border: 1px solid var(--line); padding: 0.6rem 0.8rem; text-align: left; }
+  .prose :global(th) { background: var(--bg-soft); font-family: var(--font-head); }
+  .prose :global(strong) { color: var(--ink); }
+  .prose :global(h2:first-child), .prose :global(h3:first-child) { margin-top: 0; }
+
+  .share { display: flex; align-items: center; gap: 0.7rem; padding: 1.5rem 0 2.5rem; border-top: 1px solid var(--line); color: var(--slate); font-family: var(--font-head); font-weight: 600; font-size: 0.9rem; }
+  .share a { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; background: var(--bg-mint); color: var(--teal-700); }
+  .share a:hover { background: var(--teal-600); color: #fff; }
+  .share :global(svg) { width: 18px; height: 18px; }
+</style>

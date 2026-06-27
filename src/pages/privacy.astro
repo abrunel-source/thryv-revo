@@ -1,0 +1,35 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { site } from '../data/site';
+---
+<Base title="Privacy Policy" description="How Thryv collects, uses and protects your personal information." noindex={false}>
+  <PageHero eyebrow="Legal" title="Privacy Policy" text="Last updated June 2026" />
+  <section class="section">
+    <div class="container" style="max-width:760px">
+      <div class="legal-prose">
+        <p>{site.legalName} ("we", "us") is committed to protecting your privacy and handling your personal information in accordance with the Protection of Personal Information Act (POPIA).</p>
+        <h2>Information we collect</h2>
+        <p>We collect information you provide directly — such as your name, company, email address and phone number when you contact us or request a quote — as well as standard analytics data about how our website is used.</p>
+        <h2>How we use your information</h2>
+        <ul>
+          <li>To respond to your enquiries and provide our services;</li>
+          <li>To send relevant information you have requested;</li>
+          <li>To comply with our legal and regulatory obligations;</li>
+          <li>To improve our website and services.</li>
+        </ul>
+        <h2>Sharing your information</h2>
+        <p>We do not sell your personal information. We only share it with trusted service providers who help us operate, and where required by law.</p>
+        <h2>Your rights</h2>
+        <p>You may request access to, correction of, or deletion of your personal information at any time by emailing <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+        <h2>Contact</h2>
+        <p>For any privacy questions, contact us at <a href={`mailto:${site.email}`}>{site.email}</a> or {site.phoneDisplay}.</p>
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  .legal-prose h2 { font-size: 1.4rem; margin: 2rem 0 0.6rem; }
+  .legal-prose ul { padding-left: 1.3rem; }
+  .legal-prose li { margin-bottom: 0.5rem; }
+</style>

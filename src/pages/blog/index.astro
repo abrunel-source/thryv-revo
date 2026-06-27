@@ -1,0 +1,62 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import PostCard from '../../components/PostCard.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { getAllPosts, getCategories } from '../../lib/posts';
+
+const posts = getAllPosts();
+const [featured, ...rest] = posts;
+const categories = getCategories();
+---
+<Base
+  title="Blog — Accounting & business insights"
+  description="Practical guides on accounting, tax, bookkeeping, payroll and running a business in South Africa, from the chartered accountants at Thryv."
+>
+  <PageHero
+    eyebrow="Thryv Insights"
+    title="Accounting & business guides for South African owners"
+    text="Practical, jargon-free advice on tax, bookkeeping, compliance and growth — written by chartered accountants."
+  />
+
+  <section class="section">
+    <div class="container">
+      <div class="cat-bar">
+        <span class="pill">All ({posts.length})</span>
+        {categories.map((c) => <span class="cat">{c.name} <em>{c.count}</em></span>)}
+      </div>
+
+      <a href={`/blog/${featured.slug}/`} class="featured card">
+        <div class="f-cover"><span class="cat-badge">{featured.cats?.[0] ?? 'Featured'}</span></div>
+        <div class="f-body">
+          <span class="pill">Latest</span>
+          <h2>{featured.title}</h2>
+          <p class="muted">{featured.desc || featured.excerpt}</p>
+          <span class="learn">Read article →</span>
+        </div>
+      </a>
+
+      <div class="grid grid-3" style="margin-top:2rem">
+        {rest.map((post) => <PostCard post={post} />)}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title="Have a question about your numbers?" text="Our chartered accountants are happy to help. Book a free call and get clear answers." />
+</Base>
+
+<style>
+  .cat-bar { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 2.2rem; }
+  .cat { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.8rem; border: 1px solid var(--line); border-radius: var(--radius-pill); font-size: 0.85rem; color: var(--slate); font-family: var(--font-head); font-weight: 600; }
+  .cat em { color: var(--teal-700); font-style: normal; font-size: 0.78rem; }
+  .featured { display: grid; grid-template-columns: 1fr 1.2fr; padding: 0; overflow: hidden; }
+  .f-cover { background: var(--gradient); position: relative; min-height: 260px; }
+  .f-cover::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 75% 25%, rgba(25,181,168,0.45), transparent 60%); }
+  .cat-badge { position: absolute; left: 18px; bottom: 16px; z-index:1; font-family: var(--font-head); font-weight: 700; font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.9); }
+  .f-body { padding: 2rem; display: flex; flex-direction: column; justify-content: center; }
+  .f-body .pill { align-self: flex-start; margin-bottom: 0.8rem; }
+  .f-body h2 { font-size: clamp(1.4rem, 2.5vw, 1.9rem); margin-bottom: 0.6rem; }
+  .f-body h2 { color: var(--ink); }
+  .learn { color: var(--teal-700); font-family: var(--font-head); font-weight: 600; margin-top: 1rem; }
+  @media (max-width: 760px) { .featured { grid-template-columns: 1fr; } .f-cover { min-height: 160px; } }
+</style>

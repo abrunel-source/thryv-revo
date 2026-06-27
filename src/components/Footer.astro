@@ -1,0 +1,84 @@
+---
+import { site, services, nav } from '../data/site';
+import Icon from './Icon.astro';
+const year = 2026;
+---
+<footer class="site-footer">
+  <div class="container">
+    <div class="cols">
+      <div class="about">
+        <img src={site.logo} alt={`${site.legalName} logo`} width="130" height="53" class="flogo" />
+        <p class="muted">Nurturing financial excellence for South African businesses. Fixed-fee accounting, tax, payroll and advisory from Cape Town &amp; Stellenbosch.</p>
+        <div class="socials">
+          <a href={site.social.facebook} aria-label="Thryv on Facebook" rel="noopener" target="_blank"><Icon name="facebook" /></a>
+          <a href={site.social.linkedin} aria-label="Thryv on LinkedIn" rel="noopener" target="_blank"><Icon name="linkedin" /></a>
+          <a href={site.social.twitter} aria-label="Thryv on Twitter" rel="noopener" target="_blank"><Icon name="twitter" /></a>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="ftitle">Services</h3>
+        <ul>
+          {services.slice(0, 6).map((s) => <li><a href={`/services/${s.slug}/`}>{s.title}</a></li>)}
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="ftitle">Company</h3>
+        <ul>
+          {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+          <li><a href="/services/">All services</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="ftitle">Get in touch</h3>
+        <ul class="contact">
+          <li><Icon name="phone" /> <a href={site.phoneHref}>{site.phoneDisplay}</a></li>
+          <li><Icon name="mail" /> <a href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li><Icon name="pin" /> <span>Cape Town &amp; Stellenbosch, South Africa</span></li>
+        </ul>
+        <a href="/contact/" class="btn btn--primary" style="margin-top:1rem">Book a free call</a>
+      </div>
+    </div>
+
+    <div class="legal">
+      <p>© {year} {site.legalName}. All rights reserved.</p>
+      <div class="legal-links">
+        <a href="/privacy/">Privacy Policy</a>
+        <a href="/terms/">Terms of Use</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer { background: var(--ink); color: #9fb9b9; padding: 4rem 0 2rem; }
+  .cols { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1.3fr; gap: 2.5rem; }
+  .flogo { height: 42px; width: auto; margin-bottom: 1rem; filter: brightness(0) invert(1); }
+  .about .muted { color: #8fabab; font-size: 0.95rem; max-width: 32ch; }
+  .ftitle { color: #fff; font-size: 1rem; margin-bottom: 1rem; }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li { margin-bottom: 0.6rem; }
+  .site-footer a { color: #9fb9b9; font-size: 0.95rem; }
+  .site-footer a:hover { color: var(--teal-400); }
+  .site-footer a.btn--primary { color: #fff; }
+  .site-footer a.btn--primary:hover { color: #fff; }
+  .contact li { display: flex; align-items: center; gap: 0.55rem; }
+  .contact :global(svg) { width: 17px; height: 17px; color: var(--teal-400); flex: none; }
+  .socials { display: flex; gap: 0.6rem; margin-top: 1.2rem; }
+  .socials a {
+    width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center;
+    background: rgba(255,255,255,0.07); color: #cfe0e0;
+  }
+  .socials a:hover { background: var(--teal-600); color: #fff; }
+  .socials :global(svg) { width: 18px; height: 18px; }
+  .legal {
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+    margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.88rem;
+  }
+  .legal-links { display: flex; gap: 1.5rem; }
+  @media (max-width: 860px) { .cols { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .cols { grid-template-columns: 1fr; } }
+</style>

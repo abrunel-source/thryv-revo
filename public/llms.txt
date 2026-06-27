@@ -1,0 +1,32 @@
+# Thryv — Accounting Firm in South Africa
+
+> Thryv (Thryv Accountants Pty Ltd) is a chartered accounting firm in Cape Town & Stellenbosch, South Africa, providing fixed-fee accounting, bookkeeping, tax, payroll, audit and advisory services to small and medium businesses.
+
+## Services
+- Accounting Services (fixed monthly packages): /services/accounting-services/
+- Bookkeeping: /services/bookkeeping-services/
+- Tax Services (SARS compliance): /services/tax-services/
+- Payroll: /services/payroll-services/
+- Audit Services: /services/audit-services/
+- Independent Review: /services/independent-review/
+- Financial Statement Preparation: /services/financial-statement-preparation/
+- Company Secretary: /services/company-secretary/
+- Finance Consultancy: /services/finance-consultancy-services/
+- Employer of Record: /services/employer-of-record/
+
+## Pricing
+- Bronze — R3,500/month (up to 50 transactions)
+- Silver — R5,500/month (adds payroll, up to 100 transactions)
+- Gold — R7,500/month (complete solution, up to 200 transactions)
+
+## Key pages
+- Home: /
+- About: /about/
+- Services: /services/
+- Blog: /blog/
+- Contact / Get a quote: /contact/
+
+## Contact
+- Phone: +27 73 142 1010
+- Email: admin@thryv.co.za
+- Offices: Cape Town & Stellenbosch, South Africa
