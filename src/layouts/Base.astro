@@ -37,15 +37,35 @@ const ogImage = new URL(image, site.url).href;
 const orgLd = {
   '@context': 'https://schema.org',
   '@type': 'AccountingService',
+  '@id': `${site.url}/#organization`,
   name: site.legalName,
   alternateName: site.name,
+  description: site.description,
   url: site.url,
   logo: new URL(site.logo, site.url).href,
   image: ogImage,
   email: site.email,
   telephone: site.phoneDisplay,
-  areaServed: 'ZA',
+  priceRange: 'RR',
+  currenciesAccepted: 'ZAR',
+  knowsAbout: [
+    'Accounting', 'Bookkeeping', 'Tax', 'VAT', 'Provisional tax', 'Payroll',
+    'Audit', 'Independent review', 'Annual financial statements', 'Company secretary',
+    'CIPC compliance', 'SARS compliance', 'IFRS for SMEs', 'Employer of Record',
+  ],
+  areaServed: [
+    { '@type': 'City', name: 'Cape Town' },
+    { '@type': 'City', name: 'Stellenbosch' },
+    { '@type': 'Country', name: 'South Africa' },
+  ],
   address: { '@type': 'PostalAddress', addressLocality: 'Cape Town', addressRegion: 'Western Cape', addressCountry: 'ZA' },
+  openingHoursSpecification: {
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+    opens: '08:00',
+    closes: '17:00',
+  },
+  founder: site.founders.map((f) => ({ '@type': 'Person', name: f.name, jobTitle: f.role })),
   sameAs: [site.social.facebook, site.social.linkedin, site.social.twitter],
 };
 
@@ -59,7 +79,9 @@ const blocks = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    {noindex
+      ? <meta name="robots" content="noindex, nofollow" />
+      : <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />}
     <meta name="theme-color" content="#0b7a75" />
 
     <!-- Preload primary fonts to avoid layout shift on swap -->

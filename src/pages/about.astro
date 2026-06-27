@@ -11,10 +11,29 @@ const values = [
   { icon: 'compass', t: 'Clarity & insight', d: 'Plain-language reporting and advice that helps you decide with confidence.' },
   { icon: 'users', t: 'Service-driven', d: 'We take the time to understand your unique needs and challenges.' },
 ];
+
+const aboutLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    name: 'About Thryv',
+    url: `${site.url}/about/`,
+    about: { '@id': `${site.url}/#organization` },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: site.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'About', item: site.url + '/about/' },
+    ],
+  },
+];
 ---
 <Base
-  title="About — Our story, mission & team"
-  description="Thryv was founded to be a trusted accounting and business partner for South African companies. Meet the team nurturing financial excellence from Cape Town & Stellenbosch."
+  title="About Thryv — Chartered Accountants in Cape Town"
+  description="Meet Thryv: chartered accountants in Cape Town & Stellenbosch on a mission to take accounting, tax and compliance off small business owners' plates so they can focus on growth."
+  jsonLd={aboutLd}
 >
   <PageHero
     eyebrow="About Thryv"

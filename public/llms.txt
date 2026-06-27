@@ -1,32 +1,47 @@
-# Thryv — Accounting Firm in South Africa
+# Thryv — Small Business Accountants in Cape Town & Stellenbosch
 
-> Thryv (Thryv Accountants Pty Ltd) is a chartered accounting firm in Cape Town & Stellenbosch, South Africa, providing fixed-fee accounting, bookkeeping, tax, payroll, audit and advisory services to small and medium businesses.
+> Thryv (Thryv Accountants Pty Ltd) is a chartered accounting firm in Cape Town and Stellenbosch, South Africa. We give small and medium businesses a complete, outsourced finance function — bookkeeping, accounting, tax, payroll, audit, financial statements and advisory — for one predictable fixed monthly fee. Our model removes the admin and compliance workload so owners can focus on growing their business.
+
+## What makes Thryv different
+- Fixed monthly fee — no hourly billing and no surprise invoices.
+- Chartered accountants (CA) handling SARS and CIPC compliance end to end.
+- Cloud accounting included, with real-time dashboards and management reporting.
+- A genuine business partner, not just a once-a-year accountant.
+- Serves SME owners across Cape Town, Stellenbosch and the rest of South Africa.
 
 ## Services
-- Accounting Services (fixed monthly packages): /services/accounting-services/
-- Bookkeeping: /services/bookkeeping-services/
-- Tax Services (SARS compliance): /services/tax-services/
-- Payroll: /services/payroll-services/
-- Audit Services: /services/audit-services/
-- Independent Review: /services/independent-review/
-- Financial Statement Preparation: /services/financial-statement-preparation/
-- Company Secretary: /services/company-secretary/
-- Finance Consultancy: /services/finance-consultancy-services/
-- Employer of Record: /services/employer-of-record/
+- Accounting Services — fixed-fee monthly accounting for small businesses: /services/accounting-services/
+- Bookkeeping — outsourced, cloud bookkeeping that keeps your books current: /services/bookkeeping-services/
+- Tax Services — income tax, provisional tax and VAT by registered tax practitioners: /services/tax-services/
+- Payroll — outsourced payroll with PAYE, UIF, SDL and Department of Labour submissions: /services/payroll-services/
+- Audit Services — statutory and voluntary audits under the Companies Act: /services/audit-services/
+- Independent Review — a cost-effective audit alternative for qualifying companies: /services/independent-review/
+- Financial Statements — IFRS for SMEs annual financial statements: /services/financial-statement-preparation/
+- Company Secretary — CIPC annual returns, beneficial ownership and statutory registers: /services/company-secretary/
+- Finance Consultancy — cash-flow forecasting, management accounts and outsourced CFO support: /services/finance-consultancy-services/
+- Employer of Record — hire and pay staff in South Africa without a local entity: /services/employer-of-record/
 
-## Pricing
-- Bronze — R3,500/month (up to 50 transactions)
-- Silver — R5,500/month (adds payroll, up to 100 transactions)
-- Gold — R7,500/month (complete solution, up to 200 transactions)
+## Who we help
+Small and medium business owners, startups, entrepreneurs and foreign companies expanding into South Africa, across industries including hospitality, healthcare, property/real estate, security and professional services.
 
 ## Key pages
 - Home: /
-- About: /about/
-- Services: /services/
-- Blog: /blog/
-- Contact / Get a quote: /contact/
+- About (story, mission, team): /about/
+- All services: /services/
+- Blog (accounting, tax, bookkeeping & business guides): /blog/
+- Contact / request a free quote: /contact/
+
+## Popular guides (blog)
+- Register a company and start a business in South Africa: /blog/register-a-company-and-start-a-business-in-south-africa-in-2023/
+- A beginner's guide to bookkeeping for small businesses: /blog/a-beginners-guide-to-bookkeeping-for-small-businesses/
+- Demystifying tax for small businesses in South Africa: /blog/demystifying-tax-for-small-businesses-in-south-africa/
+- How a chartered accountant adds value to your business: /blog/how-can-a-chartered-accountant-add-value-to-your-business/
+- 5 reasons companies outsource payroll in South Africa: /blog/5-reasons-why-companies-outsource-payroll-in-south-africa/
+- Independent review vs audit — which does your company need: /blog/the-difference-between-independent-review-and-audit-review/
+- Cloud accounting for African SMEs: /blog/cloud-accounting/
 
 ## Contact
 - Phone: +27 73 142 1010
 - Email: admin@thryv.co.za
-- Offices: Cape Town & Stellenbosch, South Africa
+- Offices: Cape Town & Stellenbosch, Western Cape, South Africa
+- Hours: Monday–Friday, 08:00–17:00 SAST
