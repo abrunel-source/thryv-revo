@@ -2,9 +2,9 @@
 export const site = {
   name: 'Thryv',
   legalName: 'Thryv Accountants (Pty) Ltd',
-  tagline: 'Accounting firm in South Africa',
+  tagline: 'Small Business Accountants in Cape Town',
   description:
-    'Thryv is a chartered accounting firm in Cape Town & Stellenbosch helping South African small businesses grow with fixed-fee accounting, bookkeeping, tax, payroll and advisory services.',
+    'Thryv is a chartered accountant firm in Cape Town & Stellenbosch. We help South African small businesses grow with fixed-fee accounting, bookkeeping, tax, payroll and SARS compliance — all handled for one predictable monthly fee.',
   url: 'https://thryv.co.za',
   logo: '/img/thryv-logo.png',
   ogImage: '/img/og-image.webp',
@@ -44,7 +44,7 @@ export const services: Service[] = [
     title: 'Accounting Services',
     tagline: 'Fixed-fee monthly accounting',
     summary:
-      'Comprehensive monthly accounting that takes the workload and stress off your plate — bookkeeping, reporting, compliance and advice in one fixed package.',
+      'Fixed-fee accounting services for small businesses — bookkeeping, reporting, SARS compliance and advice in one monthly package, handled by chartered accountants.',
     icon: 'calculator',
   },
   {
@@ -52,7 +52,7 @@ export const services: Service[] = [
     title: 'Bookkeeping',
     tagline: 'Keep your finances on track',
     summary:
-      'Accurate, up-to-date books so you always know where your business stands. Outsource the admin and reclaim your time.',
+      'Outsourced bookkeeping services that keep your books accurate and up to date, so you always know where your small business stands — and reclaim hours every week.',
     icon: 'book',
   },
   {
@@ -60,7 +60,7 @@ export const services: Service[] = [
     title: 'Tax Services',
     tagline: 'SARS compliance made simple',
     summary:
-      'Navigate income tax, provisional tax and VAT with expert guidance that keeps you compliant and optimised.',
+      'Income tax, provisional tax and VAT handled by registered tax practitioners who keep your business compliant with SARS and legally pay less tax.',
     icon: 'receipt',
   },
   {
@@ -68,7 +68,7 @@ export const services: Service[] = [
     title: 'Payroll',
     tagline: 'Accurate, compliant payroll',
     summary:
-      'Streamlined payroll processing and SARS / Department of Labour submissions, so your team is paid right and on time.',
+      'Outsourced payroll services with PAYE, UIF, SDL and Department of Labour submissions handled, so your team is paid right and on time, every month.',
     icon: 'users',
   },
   {
@@ -76,15 +76,15 @@ export const services: Service[] = [
     title: 'Audit Services',
     tagline: 'Transparent financial assurance',
     summary:
-      'Independent audits that uncover insight and give investors, lenders and regulators confidence in your numbers.',
+      'Independent statutory and voluntary audits that give investors, lenders and SARS confidence in your numbers and meet your Companies Act obligations.',
     icon: 'shield',
   },
   {
     slug: 'independent-review',
     title: 'Independent Review',
-    tagline: 'Trustworthy evaluations',
+    tagline: 'A cost-effective audit alternative',
     summary:
-      'A cost-effective alternative to a full audit that satisfies the Companies Act and reassures your stakeholders.',
+      'For companies that don\'t need a full audit, an independent review satisfies the Companies Act and reassures your stakeholders — at a fraction of the cost.',
     icon: 'search',
   },
   {
@@ -92,7 +92,7 @@ export const services: Service[] = [
     title: 'Financial Statements',
     tagline: 'Precise, compliant statements',
     summary:
-      'Professionally prepared annual financial statements that unlock the power of your financial data.',
+      'Annual financial statements prepared to IFRS for SMEs — funding-ready, SARS-compliant reporting that unlocks the real story behind your numbers.',
     icon: 'chart',
   },
   {
@@ -100,7 +100,7 @@ export const services: Service[] = [
     title: 'Company Secretary',
     tagline: 'Corporate compliance handled',
     summary:
-      'CIPC annual returns and statutory compliance managed for you, so you can focus on growth.',
+      'Company secretary services covering CIPC annual returns, beneficial ownership filings and statutory registers — so you never miss a deadline.',
     icon: 'briefcase',
   },
   {
@@ -108,7 +108,7 @@ export const services: Service[] = [
     title: 'Finance Consultancy',
     tagline: 'Strategic financial expertise',
     summary:
-      'Timely, precise financial insight and analytics to help you make confident decisions and grow.',
+      'Cash-flow forecasting, management accounts and business advice from a finance partner who helps small business owners make confident, data-driven decisions.',
     icon: 'compass',
   },
   {
@@ -116,7 +116,7 @@ export const services: Service[] = [
     title: 'Employer of Record',
     tagline: 'Hire in South Africa, compliantly',
     summary:
-      'Expand into South Africa without setting up an entity — we handle employment, payroll and compliance.',
+      'Employer of Record services that let you hire and pay staff in South Africa without setting up an entity — we handle employment, payroll and compliance.',
     icon: 'globe',
   },
 ];

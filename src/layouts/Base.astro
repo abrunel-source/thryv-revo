@@ -10,6 +10,7 @@ import { site } from '../data/site';
 
 interface Props {
   title?: string;
+  fullTitle?: string;
   description?: string;
   image?: string;
   noindex?: boolean;
@@ -18,13 +19,18 @@ interface Props {
 
 const {
   title,
+  fullTitle: fullTitleProp,
   description = site.description,
   image = site.ogImage,
   noindex = false,
   jsonLd,
 } = Astro.props;
 
-const fullTitle = title ? `${title} | ${site.name}` : `${site.name} — ${site.tagline}`;
+const fullTitle = fullTitleProp
+  ? fullTitleProp
+  : title
+    ? `${title} | ${site.name}`
+    : `${site.name} — ${site.tagline}`;
 const canonical = new URL(Astro.url.pathname, site.url).href;
 const ogImage = new URL(image, site.url).href;
 

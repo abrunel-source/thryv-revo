@@ -1,18 +1,26 @@
 ---
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
-import { site, packages, currency } from '../data/site';
+import { site } from '../data/site';
+
+const contactLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ContactPage',
+  name: 'Contact Thryv — Small Business Accountants in Cape Town',
+  url: `${site.url}/contact/`,
+};
 ---
 <Base
-  title="Contact — Book a free accounting call"
-  description="Get in touch with Thryv. Book a free, no-obligation call or request a quote for fixed-fee accounting, tax and payroll in South Africa."
+  title="Contact a Small Business Accountant — Free Call"
+  description="Talk to a small business accountant in Cape Town. Book a free, no-obligation call or request a fixed-fee quote for accounting, tax, bookkeeping and payroll in South Africa."
+  jsonLd={contactLd}
 >
   <section class="contact-hero">
     <div class="container grid-wrap">
       <div class="intro">
         <span class="eyebrow">Get in touch</span>
-        <h1>Let's talk about your business</h1>
-        <p class="lead">Book a free, no-obligation call and we'll show you exactly how a fixed-fee accounting partner can save you time, money and stress.</p>
+        <h1>Talk to a small business accountant</h1>
+        <p class="lead">Book a free, no-obligation call with a Cape Town chartered accountant. We'll show you exactly how a fixed-fee accounting partner can save you time, cut your tax bill and take SARS and CIPC compliance off your plate.</p>
 
         <ul class="contact-list">
           <li><span class="ci"><Icon name="phone" /></span><div><strong>Call us</strong><a href={site.phoneHref}>{site.phoneDisplay}</a></div></li>
@@ -63,21 +71,6 @@ import { site, packages, currency } from '../data/site';
       </div>
     </div>
   </section>
-
-  <section class="section section--soft">
-    <div class="container">
-      <div class="section-head center"><span class="eyebrow">Pricing</span><h2>Pick a package or ask for custom</h2></div>
-      <div class="grid grid-3 mini-pricing">
-        {packages.map((p) => (
-          <div class={`card mini${p.best ? ' mini--best' : ''}`}>
-            <h3>{p.name}</h3>
-            <div class="price"><span>{currency}</span>{p.price.toLocaleString('en-ZA')}<small>/mo</small></div>
-            <p class="muted">{p.blurb}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
 </Base>
 
 <style>
@@ -108,11 +101,6 @@ import { site, packages, currency } from '../data/site';
   .submit { justify-content: center; margin-top: 0.4rem; }
   .ic { width: 18px; height: 18px; }
   .form-note { font-size: 0.82rem; color: var(--slate); margin: 0; font-weight: 400; font-family: var(--font-body); }
-  .mini { text-align: center; }
-  .mini--best { border-color: var(--teal-500); box-shadow: var(--shadow); }
-  .mini .price { font-family: var(--font-head); font-weight: 800; font-size: 2rem; color: var(--ink); margin: 0.3rem 0 0.4rem; }
-  .mini .price span { font-size: 1rem; vertical-align: super; }
-  .mini .price small { font-size: 0.85rem; color: var(--slate); font-weight: 600; }
   @media (max-width: 860px) { .grid-wrap { grid-template-columns: 1fr; } }
   @media (max-width: 480px) { .row { grid-template-columns: 1fr; } }
 </style>
