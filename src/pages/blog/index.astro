@@ -3,7 +3,7 @@ import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import PostCard from '../../components/PostCard.astro';
 import CtaBand from '../../components/CtaBand.astro';
-import { getAllPosts, getCategories } from '../../lib/posts';
+import { getAllPosts, getCategories, siloForCategory } from '../../lib/posts';
 
 const posts = getAllPosts();
 const [featured, ...rest] = posts;
@@ -23,7 +23,12 @@ const categories = getCategories();
     <div class="container">
       <div class="cat-bar">
         <span class="pill">All ({posts.length})</span>
-        {categories.map((c) => <span class="cat">{c.name} <em>{c.count}</em></span>)}
+        {categories.map((c) => {
+          const silo = siloForCategory(c.name);
+          return silo
+            ? <a class="cat cat--link" href={`/services/${silo.service}/`}>{c.name} <em>{c.count}</em></a>
+            : <span class="cat">{c.name} <em>{c.count}</em></span>;
+        })}
       </div>
 
       <a href={`/blog/${featured.slug}/`} class="featured card">
@@ -49,6 +54,8 @@ const categories = getCategories();
   .cat-bar { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 2.2rem; }
   .cat { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.8rem; border: 1px solid var(--line); border-radius: var(--radius-pill); font-size: 0.85rem; color: var(--slate); font-family: var(--font-head); font-weight: 600; }
   .cat em { color: var(--teal-700); font-style: normal; font-size: 0.78rem; }
+  .cat--link { transition: border-color 0.15s, color 0.15s; }
+  .cat--link:hover { border-color: var(--teal-500); color: var(--teal-700); }
   .featured { display: grid; grid-template-columns: 1fr 1.2fr; padding: 0; overflow: hidden; }
   .f-cover { background: var(--gradient); position: relative; min-height: 260px; }
   .f-cover::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 75% 25%, rgba(25,181,168,0.45), transparent 60%); }

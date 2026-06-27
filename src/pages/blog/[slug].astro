@@ -4,7 +4,8 @@ import PostCard from '../../components/PostCard.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import Icon from '../../components/Icon.astro';
 import { site } from '../../data/site';
-import { getAllPosts, getPost, getRelated, rewriteLinks, readingTime, formatDate } from '../../lib/posts';
+import { getAllPosts, getPost, getRelated, getSilo, rewriteLinks, autoLinkServices, readingTime, formatDate } from '../../lib/posts';
+import { services } from '../../data/site';
 
 export function getStaticPaths() {
   return getAllPosts().map((p) => ({ params: { slug: p.slug } }));
@@ -12,9 +13,11 @@ export function getStaticPaths() {
 
 const { slug } = Astro.params;
 const post = getPost(slug!)!;
-const html = rewriteLinks(post.html);
+const html = autoLinkServices(rewriteLinks(post.html));
 const related = getRelated(post);
 const cat = post.cats?.[0];
+const silo = getSilo(post);
+const siloService = services.find((s) => s.slug === silo.service)!;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -56,6 +59,15 @@ const breadcrumb = {
 
     <div class="container narrow">
       <div class="prose" set:html={html} />
+
+      <aside class="svc-callout">
+        <div>
+          <span class="sc-eyebrow">{silo.label}</span>
+          <h3>How Thryv can help</h3>
+          <p>Thryv handles {siloService.title.toLowerCase()} for small businesses across Cape Town &amp; Stellenbosch — {siloService.summary}</p>
+        </div>
+        <a href={`/services/${silo.service}/`} class="btn btn--primary">Explore {siloService.title}</a>
+      </aside>
 
       <div class="share">
         <span>Share:</span>
@@ -105,6 +117,16 @@ const breadcrumb = {
   .prose :global(th) { background: var(--bg-soft); font-family: var(--font-head); }
   .prose :global(strong) { color: var(--ink); }
   .prose :global(h2:first-child), .prose :global(h3:first-child) { margin-top: 0; }
+
+  .svc-callout {
+    display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap;
+    background: var(--bg-mint); border: 1px solid var(--line); border-radius: var(--radius-lg);
+    padding: 1.6rem 1.8rem; margin: 1rem 0 2rem;
+  }
+  .svc-callout .sc-eyebrow { font-family: var(--font-head); font-weight: 700; font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--teal-600); }
+  .svc-callout h3 { font-size: 1.25rem; margin: 0.2rem 0 0.4rem; color: var(--ink); }
+  .svc-callout p { margin: 0; color: var(--ink-700); font-size: 0.96rem; max-width: 52ch; }
+  .svc-callout .btn { flex: none; }
 
   .share { display: flex; align-items: center; gap: 0.7rem; padding: 1.5rem 0 2.5rem; border-top: 1px solid var(--line); color: var(--slate); font-family: var(--font-head); font-weight: 600; font-size: 0.9rem; }
   .share a { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; background: var(--bg-mint); color: var(--teal-700); }

@@ -78,3 +78,81 @@ export function getRelated(post: Post, limit = 3): Post[] {
     .sort((a, b) => b.score - a.score || (a.p.date < b.p.date ? 1 : -1));
   return scored.slice(0, limit).map((s) => s.p);
 }
+
+/* ----------------------------------------------------------------------------
+ * SEO SILOS
+ * Each blog category maps to a "pillar" service page. Cluster posts link UP to
+ * their pillar (related-service block + breadcrumb), SIDEWAYS to same-silo posts
+ * (related posts), and the pillar pages link DOWN to their cluster posts. Body
+ * copy is auto-linked to money pages. This concentrates internal link equity on
+ * the service and home pages.
+ * ------------------------------------------------------------------------- */
+
+export type Silo = { service: string; label: string };
+
+const SILO_BY_CATEGORY: Record<string, Silo> = {
+  Accounting: { service: 'accounting-services', label: 'Accounting' },
+  Bookkeeping: { service: 'bookkeeping-services', label: 'Bookkeeping' },
+  Tax: { service: 'tax-services', label: 'Tax & SARS' },
+  Payroll: { service: 'payroll-services', label: 'Payroll' },
+  'Employer of record': { service: 'employer-of-record', label: 'Employer of Record' },
+  Audit: { service: 'audit-services', label: 'Audit' },
+  'Audited Financial Statements': { service: 'financial-statement-preparation', label: 'Financial Statements' },
+  'Independent Review': { service: 'independent-review', label: 'Independent Review' },
+  'Business registration': { service: 'company-secretary', label: 'Company Registration' },
+};
+
+const DEFAULT_SILO: Silo = { service: 'accounting-services', label: 'Accounting' };
+
+/** The pillar silo for a post, derived from its first mapped category. */
+export function getSilo(post: Post): Silo {
+  for (const c of post.cats) if (SILO_BY_CATEGORY[c]) return SILO_BY_CATEGORY[c];
+  return DEFAULT_SILO;
+}
+
+/** The pillar silo for a single category name (used for topic hubs). */
+export function siloForCategory(cat: string): Silo | undefined {
+  return SILO_BY_CATEGORY[cat];
+}
+
+/** Cluster posts that belong to a given service's silo (newest first). */
+export function getPostsForService(serviceSlug: string, limit = 3): Post[] {
+  return getAllPosts()
+    .filter((p) => getSilo(p).service === serviceSlug)
+    .slice(0, limit);
+}
+
+/**
+ * Inject up to `max` contextual internal links from body copy to service pages.
+ * Only links inside <p> blocks that don't already contain a link, only the first
+ * occurrence of each phrase, and each service is linked at most once per article.
+ */
+const AUTO_LINKS: { re: RegExp; service: string }[] = [
+  { re: /\bannual financial statements\b/i, service: 'financial-statement-preparation' },
+  { re: /\bprovisional tax\b/i, service: 'tax-services' },
+  { re: /\bcompany secretary\b/i, service: 'company-secretary' },
+  { re: /\bindependent review\b/i, service: 'independent-review' },
+  { re: /\bemployer of record\b/i, service: 'employer-of-record' },
+  { re: /\bcash[\s-]?flow forecasting\b/i, service: 'finance-consultancy-services' },
+  { re: /\bsmall business accountant\b/i, service: 'accounting-services' },
+  { re: /\bbookkeeping\b/i, service: 'bookkeeping-services' },
+  { re: /\bpayroll\b/i, service: 'payroll-services' },
+];
+
+export function autoLinkServices(html: string, max = 3): string {
+  const used = new Set<string>();
+  let count = 0;
+  return html.replace(/(<p[^>]*>)([\s\S]*?)(<\/p>)/g, (m, open, inner, close) => {
+    if (count >= max || inner.includes('<a')) return m;
+    for (const { re, service } of AUTO_LINKS) {
+      if (used.has(service)) continue;
+      if (re.test(inner)) {
+        inner = inner.replace(re, (hit: string) => `<a href="/services/${service}/">${hit}</a>`);
+        used.add(service);
+        count++;
+        break; // at most one injected link per paragraph
+      }
+    }
+    return open + inner + close;
+  });
+}
