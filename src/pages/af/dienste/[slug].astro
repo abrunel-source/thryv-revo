@@ -1,15 +1,15 @@
 ---
-import Base from '../../layouts/Base.astro';
-import ServiceDetail from '../../components/pages/ServiceDetail.astro';
-import { services, site } from '../../data/site';
-import { routes, serviceHref } from '../../i18n/config';
-import { getServiceContent } from '../../i18n/content';
+import Base from '../../../layouts/Base.astro';
+import ServiceDetail from '../../../components/pages/ServiceDetail.astro';
+import { services, site } from '../../../data/site';
+import { SERVICE_SLUGS, routes, serviceHref } from '../../../i18n/config';
+import { getServiceContent } from '../../../i18n/content';
 
 export function getStaticPaths() {
-  return services.map((s) => ({ params: { slug: s.slug }, props: { enSlug: s.slug } }));
+  return services.map((s) => ({ params: { slug: SERVICE_SLUGS[s.slug].af }, props: { enSlug: s.slug } }));
 }
 const { enSlug } = Astro.props;
-const lang = 'en';
+const lang = 'af';
 const c = getServiceContent(enSlug, lang);
 const r = routes(lang);
 const pageUrl = new URL(serviceHref(lang, enSlug), site.url).href;
@@ -19,13 +19,13 @@ const serviceLd = {
   '@context': 'https://schema.org', '@type': 'Service',
   name: c.title, serviceType: c.title, description: c.summary,
   provider: { '@type': 'AccountingService', name: site.legalName, url: site.url },
-  areaServed: { '@type': 'Country', name: 'South Africa' }, url: pageUrl,
+  areaServed: { '@type': 'Country', name: 'South Africa' }, url: pageUrl, inLanguage: 'af-ZA',
 };
 const breadcrumbLd = {
   '@context': 'https://schema.org', '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: new URL(r.home, site.url).href },
-    { '@type': 'ListItem', position: 2, name: 'Services', item: new URL(r.services, site.url).href },
+    { '@type': 'ListItem', position: 1, name: 'Tuis', item: new URL(r.home, site.url).href },
+    { '@type': 'ListItem', position: 2, name: 'Dienste', item: new URL(r.services, site.url).href },
     { '@type': 'ListItem', position: 3, name: c.title, item: pageUrl },
   ],
 };

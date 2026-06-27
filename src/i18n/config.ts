@@ -69,3 +69,32 @@ export function blogHref(lang: Locale, enSlug: string, afSlug?: string): string 
 
 /** Page slug for a localised page key (used when defining AF route file paths). */
 export const pageSlug = (k: PageKey, lang: Locale) => PAGE_SLUGS[k][lang];
+
+/** Map a single canonical (English) internal path to its localised equivalent. */
+function localizePath(path: string, lang: Locale, postAfSlug?: Record<string, string>): string {
+  let m = path.match(/^\/services\/([^/]+)\/?$/);
+  if (m) return serviceHref(lang, m[1]);
+  m = path.match(/^\/blog\/([^/]+)\/?$/);
+  if (m) return blogHref(lang, m[1], postAfSlug?.[m[1]]);
+  const r = routes(lang);
+  switch (path.replace(/\/$/, '')) {
+    case '': return r.home;
+    case '/blog': return r.blog;
+    case '/services': return r.services;
+    case '/contact': return r.contact;
+    case '/about': return r.about;
+    case '/privacy': return r.privacy;
+    case '/terms': return r.terms;
+    default: return path;
+  }
+}
+
+/**
+ * Rewrite canonical (English) internal links in an HTML string to their
+ * localised equivalents. External/absolute links are left untouched.
+ * For en, returns the HTML unchanged.
+ */
+export function localizeLinks(html: string, lang: Locale, postAfSlug?: Record<string, string>): string {
+  if (lang === defaultLocale) return html;
+  return html.replace(/href="(\/[^"]*)"/g, (_m, path: string) => `href="${localizePath(path, lang, postAfSlug)}"`);
+}
