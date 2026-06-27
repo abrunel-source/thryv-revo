@@ -1,0 +1,21 @@
+---
+import Base from '../../layouts/Base.astro';
+import Home from '../../components/pages/Home.astro';
+import { site } from '../../data/site';
+import { routes } from '../../i18n/config';
+import { t } from '../../i18n/ui';
+
+const lang = 'af';
+const meta = t(lang).meta;
+const alternates = { en: routes('en').home, af: routes('af').home };
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: site.name,
+  url: `${site.url}/af/`,
+  inLanguage: 'af-ZA',
+};
+---
+<Base lang={lang} alternates={alternates} fullTitle={meta.homeFullTitle} description={meta.siteDescription} jsonLd={jsonLd}>
+  <Home lang={lang} />
+</Base>

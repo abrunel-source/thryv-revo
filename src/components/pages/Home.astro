@@ -1,0 +1,227 @@
+---
+import Icon from '../Icon.astro';
+import PostCard from '../PostCard.astro';
+import CtaBand from '../CtaBand.astro';
+import { currency } from '../../data/site';
+import { getAllPosts } from '../../lib/posts';
+import { type Locale, routes } from '../../i18n/config';
+import { t } from '../../i18n/ui';
+import { getServices, getPackages } from '../../i18n/content';
+
+interface Props { lang?: Locale }
+const { lang = 'en' } = Astro.props;
+const d = t(lang).home;
+const r = routes(lang);
+const services = getServices(lang);
+const packages = getPackages(lang);
+const posts = getAllPosts().slice(0, 3);
+---
+<!-- HERO -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <span class="pill">{d.pill}</span>
+      <h1>{d.h1a}<span class="grad">thryv</span>{d.h1b}</h1>
+      <p class="lead">{d.lead}</p>
+      <div class="hero-cta">
+        <a href={r.contact} class="btn btn--primary">{t(lang).common.bookCall} <Icon name="arrow" class="ic" /></a>
+        <a href="#pricing" class="btn btn--ghost">{d.viewPackages}</a>
+      </div>
+      <ul class="hero-trust">
+        {d.trust.map((item) => <li><Icon name="check" class="tick" /> {item}</li>)}
+      </ul>
+    </div>
+
+    <aside class="hero-card" aria-label="Thryv">
+      {d.card.map((c, i) => (
+        <div class="hc-row"><div class="icon-chip"><Icon name={['spark', 'chart', 'shield'][i]} /></div>
+          <div><strong>{c.t}</strong><p class="muted">{c.d}</p></div></div>
+      ))}
+      <a href={r.about} class="hc-link">{d.meetTeam} <Icon name="arrow" class="ic" /></a>
+    </aside>
+  </div>
+
+  <div class="container">
+    <div class="stats">
+      {d.stats.map((s) => <div class="stat"><div class="stat-n">{s.n}</div><div class="stat-l">{s.l}</div></div>)}
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section" id="services">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">{d.servicesEyebrow}</span>
+      <h2>{d.servicesTitle}</h2>
+      <p class="lead">{d.servicesIntro}</p>
+    </div>
+    <div class="grid grid-3">
+      {services.map((s) => (
+        <a href={s.href} class="card service-card">
+          <div class="icon-chip"><Icon name={s.icon} /></div>
+          <h3>{s.title}</h3>
+          <p class="muted">{s.summary}</p>
+          <span class="learn">{t(lang).common.learnMore} <Icon name="arrow" class="ic" /></span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- WHY / PROCESS -->
+<section class="section section--soft">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">{d.howEyebrow}</span>
+      <h2>{d.howTitle}</h2>
+    </div>
+    <div class="grid grid-4 steps">
+      {d.steps.map((s, i) => (
+        <div class="step">
+          <div class="step-n">{i + 1}</div>
+          <h3>{s.t}</h3>
+          <p class="muted">{s.d}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section" id="pricing">
+  <div class="container">
+    <div class="section-head center">
+      <span class="eyebrow">{d.pricingEyebrow}</span>
+      <h2>{d.pricingTitle}</h2>
+      <p class="lead">{d.pricingIntro}</p>
+    </div>
+    <div class="grid grid-3 pricing">
+      {packages.map((p) => (
+        <div class={`card price-card${p.best ? ' price-card--best' : ''}`}>
+          {p.best && <span class="best-badge">{d.mostPopular}</span>}
+          <h3 class="pname">{p.name}</h3>
+          <p class="muted pblurb">{p.blurb}</p>
+          <div class="price"><span class="cur">{currency}</span>{p.price.toLocaleString('en-ZA')}<span class="per">/mo</span></div>
+          <a href={r.contact} class={`btn ${p.best ? 'btn--primary' : 'btn--ghost'} pbtn`}>{d.getStarted}</a>
+          <ul class="features">
+            {p.features.map((f) => <li><Icon name="check" class="ftick" /> {f}</li>)}
+          </ul>
+        </div>
+      ))}
+    </div>
+    <p class="text-center muted" style="margin-top:1.5rem">
+      {d.bespokePre}<a href={r.contact}>{d.bespokeLink}</a>
+    </p>
+  </div>
+</section>
+
+<!-- TRUST / MISSION -->
+<section class="section section--ink">
+  <div class="container mission">
+    <div>
+      <span class="eyebrow">{d.missionEyebrow}</span>
+      <h2>{d.missionTitle}</h2>
+      <p class="lead">{d.missionText}</p>
+      <a href={r.about} class="btn btn--light" style="margin-top:0.5rem">{d.ourStory}</a>
+    </div>
+    <div class="quote-card">
+      <Icon name="star" class="qstar" /><Icon name="star" class="qstar" /><Icon name="star" class="qstar" /><Icon name="star" class="qstar" /><Icon name="star" class="qstar" />
+      <p set:html={d.quote.replace('thryv', '<em>thryv</em>')} />
+      <strong>{d.quoteAttr}</strong>
+    </div>
+  </div>
+</section>
+
+<!-- BLOG -->
+<section class="section">
+  <div class="container">
+    <div class="section-head" style="display:flex;justify-content:space-between;align-items:flex-end;max-width:none;flex-wrap:wrap;gap:1rem">
+      <div>
+        <span class="eyebrow">{d.insightsEyebrow}</span>
+        <h2>{d.blogTitle}</h2>
+      </div>
+      <a href={r.blog} class="btn btn--ghost">{t(lang).common.allArticles}</a>
+    </div>
+    <div class="grid grid-3">
+      {posts.map((post) => <PostCard post={post} lang={lang} />)}
+    </div>
+  </div>
+</section>
+
+<CtaBand lang={lang} />
+
+<style>
+  /* Hero */
+  .hero { background: var(--bg-soft); position: relative; overflow: hidden; padding-top: clamp(2.5rem, 6vw, 4.5rem); }
+  .hero::before {
+    content: ''; position: absolute; top: -180px; right: -160px; width: 520px; height: 520px;
+    background: radial-gradient(circle, rgba(25,181,168,0.18), transparent 65%); pointer-events: none;
+  }
+  .hero-grid { display: grid; grid-template-columns: 1.2fr 0.9fr; gap: 3rem; align-items: center; }
+  .hero-copy .pill { margin-bottom: 1.2rem; }
+  .grad { background: var(--gradient-bright); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero-cta { display: flex; gap: 0.8rem; flex-wrap: wrap; margin: 1.6rem 0 1.4rem; }
+  .ic { width: 18px; height: 18px; }
+  .hero-trust { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.7rem 1.4rem; color: var(--slate); font-size: 0.92rem; font-weight: 500; }
+  .hero-trust li { display: inline-flex; align-items: center; gap: 0.45rem; }
+  .hero-trust .tick { color: var(--teal-600); }
+
+  .hero-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 1.6rem; box-shadow: var(--shadow-lg); }
+  .hc-row { display: flex; gap: 1rem; align-items: flex-start; padding: 0.8rem 0; border-bottom: 1px solid var(--line); }
+  .hc-row:first-child { padding-top: 0; }
+  .hc-row .icon-chip { margin: 0; flex: none; width: 44px; height: 44px; }
+  .hc-row strong { font-family: var(--font-head); color: var(--ink); display: block; }
+  .hc-row p { margin: 0.15rem 0 0; font-size: 0.9rem; }
+  .hc-link { display: inline-flex; align-items: center; gap: 0.4rem; font-family: var(--font-head); font-weight: 600; margin-top: 1rem; }
+
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 3rem; padding: 1.8rem 0 0; border-top: 1px solid var(--line); }
+  .stat-n { font-family: var(--font-head); font-weight: 800; font-size: 1.9rem; color: var(--teal-700); letter-spacing: -0.02em; }
+  .stat-l { color: var(--slate); font-size: 0.9rem; }
+
+  /* Service cards */
+  .service-card { display: flex; flex-direction: column; }
+  .service-card h3 { color: var(--ink); }
+  .service-card .muted { font-size: 0.96rem; flex: 1; }
+  .learn { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--teal-700); font-family: var(--font-head); font-weight: 600; font-size: 0.92rem; margin-top: 1rem; }
+  .service-card:hover .learn { gap: 0.7rem; }
+
+  /* Steps */
+  .step-n {
+    width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center;
+    background: var(--gradient-bright); color: #fff; font-family: var(--font-head); font-weight: 800;
+    margin-bottom: 1rem;
+  }
+  .step h3 { font-size: 1.15rem; }
+
+  /* Pricing */
+  .price-card { display: flex; flex-direction: column; position: relative; }
+  .price-card--best { border-color: var(--teal-500); box-shadow: var(--shadow-lg); }
+  .best-badge {
+    position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+    background: var(--gradient-bright); color: #fff; font-family: var(--font-head); font-weight: 700;
+    font-size: 0.74rem; letter-spacing: 0.05em; padding: 0.35rem 0.9rem; border-radius: var(--radius-pill);
+  }
+  .pname { font-size: 1.4rem; margin-bottom: 0.2rem; }
+  .pblurb { font-size: 0.92rem; min-height: 2.6em; }
+  .price { font-family: var(--font-head); font-weight: 800; font-size: 2.6rem; color: var(--ink); letter-spacing: -0.03em; margin: 0.4rem 0 1rem; }
+  .price .cur { font-size: 1.3rem; vertical-align: super; margin-right: 2px; }
+  .price .per { font-size: 1rem; font-weight: 600; color: var(--slate); }
+  .pbtn { justify-content: center; }
+  .features { list-style: none; margin: 1.4rem 0 0; padding: 1.4rem 0 0; border-top: 1px solid var(--line); display: grid; gap: 0.7rem; }
+  .features li { display: flex; gap: 0.6rem; align-items: flex-start; font-size: 0.93rem; color: var(--ink-700); }
+  .ftick { width: 18px; height: 18px; color: var(--teal-600); flex: none; margin-top: 2px; }
+
+  /* Mission */
+  .mission { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 2.5rem; align-items: center; }
+  .quote-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: var(--radius-lg); padding: 2rem; }
+  .qstar { width: 18px; height: 18px; color: var(--gold); fill: var(--gold); display: inline-block; }
+  .quote-card p { font-size: 1.15rem; color: #eaf5f3; margin: 1rem 0; }
+  .quote-card strong { color: var(--teal-400); font-family: var(--font-head); }
+
+  @media (max-width: 960px) {
+    .hero-grid, .mission { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: repeat(2, 1fr); gap: 1.4rem; }
+  }
+  @media (max-width: 600px) { .steps { gap: 1.6rem; } }
+</style>

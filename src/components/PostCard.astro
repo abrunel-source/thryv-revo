@@ -1,22 +1,27 @@
 ---
 import type { Post } from '../lib/posts';
-import { formatDate, readingTime } from '../lib/posts';
-interface Props { post: Post }
-const { post } = Astro.props;
-const cat = post.cats?.[0];
+import { formatDate, readingTime, localizePost, categoryLabel } from '../lib/posts';
+import { type Locale, blogHref } from '../i18n/config';
+import { t } from '../i18n/ui';
+interface Props { post: Post; lang?: Locale }
+const { post, lang = 'en' } = Astro.props;
+const dict = t(lang);
+const lp = localizePost(post, lang);
+const cat = categoryLabel(post.cats?.[0], lang) || (lang === 'af' ? 'Insigte' : 'Insights');
+const href = blogHref(lang, post.slug, post.af?.slug);
 ---
 <article class="post-card card">
-  <a href={`/blog/${post.slug}/`} class="cover" aria-hidden="true" tabindex="-1">
-    <span class="cat-badge">{cat ?? 'Insights'}</span>
+  <a href={href} class="cover" aria-hidden="true" tabindex="-1">
+    <span class="cat-badge">{cat}</span>
   </a>
   <div class="body">
     {cat && <span class="pill">{cat}</span>}
-    <h3><a href={`/blog/${post.slug}/`}>{post.title}</a></h3>
-    <p class="muted excerpt">{post.desc || post.excerpt}</p>
+    <h3><a href={href}>{lp.title}</a></h3>
+    <p class="muted excerpt">{lp.desc || lp.excerpt}</p>
     <div class="meta">
-      <time datetime={post.date}>{formatDate(post.date)}</time>
+      <time datetime={post.date}>{formatDate(post.date, lang)}</time>
       <span>·</span>
-      <span>{readingTime(post.html)} min read</span>
+      <span>{readingTime(lp.html)} {dict.common.minRead}</span>
     </div>
   </div>
 </article>

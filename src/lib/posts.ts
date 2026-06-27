@@ -1,6 +1,15 @@
 import data from '../data/posts.json';
 import { services } from '../data/site';
 
+export type PostAf = {
+  title: string;
+  slug: string;
+  desc: string;
+  excerpt?: string;
+  focus_kw?: string;
+  html: string;
+};
+
 export type Post = {
   id: number;
   title: string;
@@ -13,6 +22,7 @@ export type Post = {
   cats: string[];
   thumb: string;
   html: string;
+  af?: PostAf;
 };
 
 const serviceSlugs = new Set(services.map((s) => s.slug));
@@ -45,13 +55,64 @@ export function readingTime(html: string): number {
   return Math.max(1, Math.round(words / 200));
 }
 
-export function formatDate(d: string): string {
-  return new Date(d + 'T00:00:00Z').toLocaleDateString('en-ZA', {
+export function formatDate(d: string, lang: 'en' | 'af' = 'en'): string {
+  return new Date(d + 'T00:00:00Z').toLocaleDateString(lang === 'af' ? 'af-ZA' : 'en-ZA', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
     timeZone: 'UTC',
   });
+}
+
+/** Afrikaans labels for blog categories. */
+const CATEGORY_AF: Record<string, string> = {
+  Accounting: 'Rekeningkunde',
+  Bookkeeping: 'Boekhouding',
+  Tax: 'Belasting',
+  Payroll: 'Betaalstaat',
+  'Employer of record': 'Werkgewer van Rekord',
+  Audit: 'Oudit',
+  'Audited Financial Statements': 'Geouditeerde Finansiële State',
+  'Independent Review': 'Onafhanklike Hersiening',
+  'Business registration': 'Besigheidsregistrasie',
+};
+
+export function categoryLabel(cat: string | undefined, lang: 'en' | 'af' = 'en'): string {
+  if (!cat) return '';
+  return lang === 'af' ? CATEGORY_AF[cat] ?? cat : cat;
+}
+
+/** A post's user-facing fields resolved for a locale (falls back to English). */
+export type LocalPost = {
+  enSlug: string;
+  slug: string;
+  title: string;
+  desc: string;
+  excerpt: string;
+  html: string;
+  focus_kw: string;
+  date: string;
+  cats: string[];
+};
+
+export function localizePost(post: Post, lang: 'en' | 'af' = 'en'): LocalPost {
+  const af = lang === 'af' ? post.af : undefined;
+  return {
+    enSlug: post.slug,
+    slug: af?.slug ?? post.slug,
+    title: af?.title ?? post.title,
+    desc: af?.desc ?? post.desc,
+    excerpt: af?.excerpt ?? af?.desc ?? post.excerpt,
+    html: af?.html ?? post.html,
+    focus_kw: af?.focus_kw ?? post.focus_kw,
+    date: post.date,
+    cats: post.cats,
+  };
+}
+
+/** Look a post up by its Afrikaans slug (used by AF blog routes). */
+export function getPostByAfSlug(slug: string): Post | undefined {
+  return allPosts.find((p) => (p.af?.slug ?? p.slug) === slug);
 }
 
 export function getAllPosts(): Post[] {

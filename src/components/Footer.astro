@@ -1,6 +1,21 @@
 ---
-import { site, services, nav } from '../data/site';
+import { site } from '../data/site';
 import Icon from './Icon.astro';
+import { type Locale, routes } from '../i18n/config';
+import { t } from '../i18n/ui';
+import { getServices } from '../i18n/content';
+
+interface Props { lang?: Locale }
+const { lang = 'en' } = Astro.props;
+const dict = t(lang);
+const r = routes(lang);
+const services = getServices(lang).slice(0, 6);
+const nav = [
+  { label: dict.nav.services, href: r.services },
+  { label: dict.nav.about, href: r.about },
+  { label: dict.nav.blog, href: r.blog },
+  { label: dict.nav.contact, href: r.contact },
+];
 const year = 2026;
 ---
 <footer class="site-footer">
@@ -8,7 +23,7 @@ const year = 2026;
     <div class="cols">
       <div class="about">
         <img src={site.logo} alt={`${site.legalName} logo`} width="130" height="53" class="flogo" />
-        <p class="muted">Nurturing financial excellence for South African businesses. Fixed-fee accounting, tax, payroll and advisory from Cape Town &amp; Stellenbosch.</p>
+        <p class="muted">{dict.footer.tagline}</p>
         <div class="socials">
           <a href={site.social.facebook} aria-label="Thryv on Facebook" rel="noopener" target="_blank"><Icon name="facebook" /></a>
           <a href={site.social.linkedin} aria-label="Thryv on LinkedIn" rel="noopener" target="_blank"><Icon name="linkedin" /></a>
@@ -17,36 +32,36 @@ const year = 2026;
       </div>
 
       <div>
-        <h3 class="ftitle">Services</h3>
+        <h3 class="ftitle">{dict.footer.services}</h3>
         <ul>
-          {services.slice(0, 6).map((s) => <li><a href={`/services/${s.slug}/`}>{s.title}</a></li>)}
+          {services.map((s) => <li><a href={s.href}>{s.title}</a></li>)}
         </ul>
       </div>
 
       <div>
-        <h3 class="ftitle">Company</h3>
+        <h3 class="ftitle">{dict.footer.company}</h3>
         <ul>
           {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
-          <li><a href="/services/">All services</a></li>
+          <li><a href={r.services}>{dict.footer.allServices}</a></li>
         </ul>
       </div>
 
       <div>
-        <h3 class="ftitle">Get in touch</h3>
+        <h3 class="ftitle">{dict.footer.getInTouch}</h3>
         <ul class="contact">
           <li><Icon name="phone" /> <a href={site.phoneHref}>{site.phoneDisplay}</a></li>
           <li><Icon name="mail" /> <a href={`mailto:${site.email}`}>{site.email}</a></li>
           <li><Icon name="pin" /> <span>Cape Town &amp; Stellenbosch, South Africa</span></li>
         </ul>
-        <a href="/contact/" class="btn btn--primary" style="margin-top:1rem">Book a free call</a>
+        <a href={r.contact} class="btn btn--primary" style="margin-top:1rem">{dict.common.bookCall}</a>
       </div>
     </div>
 
     <div class="legal">
-      <p>© {year} {site.legalName}. All rights reserved.</p>
+      <p>© {year} {site.legalName}. {dict.footer.rights}</p>
       <div class="legal-links">
-        <a href="/privacy/">Privacy Policy</a>
-        <a href="/terms/">Terms of Use</a>
+        <a href={r.privacy}>{dict.footer.privacy}</a>
+        <a href={r.terms}>{dict.footer.terms}</a>
       </div>
     </div>
   </div>

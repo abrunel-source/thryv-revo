@@ -1,0 +1,52 @@
+{
+  "accounting-services": {
+    "title": "Rekeningkundige Dienste",
+    "tagline": "Vaste-fooi maandelikse rekeningkunde",
+    "summary": "Vaste-fooi rekeningkundige dienste vir klein besighede — boekhouding, verslagdoening, SARS-nakoming en advies in een maandelikse pakket, hanteer deur geoktrooieerde rekenmeesters."
+  },
+  "bookkeeping-services": {
+    "title": "Boekhouding",
+    "tagline": "Hou jou finansies op koers",
+    "summary": "Uitgekontrakteerde boekhoudienste wat jou boeke akkuraat en op datum hou, sodat jy altyd weet waar jou klein besigheid staan — en wen ure elke week terug."
+  },
+  "tax-services": {
+    "title": "Belastingdienste",
+    "tagline": "SARS-nakoming maklik gemaak",
+    "summary": "Inkomstebelasting, voorlopige belasting en BTW hanteer deur geregistreerde belastingpraktisyns wat jou besigheid SARS-nakomend hou en wettiglik minder belasting laat betaal."
+  },
+  "payroll-services": {
+    "title": "Betaalstaat",
+    "tagline": "Akkurate, nakomende betaalstaat",
+    "summary": "Uitgekontrakteerde betaalstaatdienste met PAYE-, UIF-, SDL- en Departement van Arbeid-indienings hanteer, sodat jou span reg en betyds betaal word, elke maand."
+  },
+  "audit-services": {
+    "title": "Ouditdienste",
+    "tagline": "Deursigtige finansiële versekering",
+    "summary": "Onafhanklike statutêre en vrywillige oudits wat beleggers, leners en SARS vertroue in jou syfers gee en aan jou Maatskappywet-verpligtinge voldoen."
+  },
+  "independent-review": {
+    "title": "Onafhanklike Hersiening",
+    "tagline": "'n Koste-effektiewe alternatief vir 'n oudit",
+    "summary": "Vir maatskappye wat nie 'n volle oudit benodig nie, voldoen 'n onafhanklike hersiening aan die Maatskappywet en stel jou belanghebbendes gerus — teen 'n fraksie van die koste."
+  },
+  "financial-statement-preparation": {
+    "title": "Finansiële State",
+    "tagline": "Presiese, nakomende state",
+    "summary": "Jaarlikse finansiële state opgestel volgens IFRS vir KMO's — befondsingsgereed, SARS-nakomende verslagdoening wat die ware storie agter jou syfers ontsluit."
+  },
+  "company-secretary": {
+    "title": "Maatskappysekretaris",
+    "tagline": "Korporatiewe nakoming hanteer",
+    "summary": "Maatskappysekretaris-dienste wat CIPC-jaaropgawes, uiteindelike eienaarskap-indienings en statutêre registers dek — sodat jy nooit 'n spertyd misloop nie."
+  },
+  "finance-consultancy-services": {
+    "title": "Finansiële Konsultasie",
+    "tagline": "Strategiese finansiële kundigheid",
+    "summary": "Kontantvloeivooruitskatting, bestuursrekeninge en besigheidsadvies van 'n finansiële vennoot wat kleinbesigheidseienaars help om selfversekerde, data-gedrewe besluite te neem."
+  },
+  "employer-of-record": {
+    "title": "Werkgewer van Rekord",
+    "tagline": "Huur in Suid-Afrika aan, nakomend",
+    "summary": "Werkgewer-van-rekord-dienste wat jou laat personeel in Suid-Afrika aanstel en betaal sonder om 'n entiteit op te stel — ons hanteer indiensneming, betaalstaat en nakoming."
+  }
+}

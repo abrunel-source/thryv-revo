@@ -1,10 +1,25 @@
 ---
-import { site, nav } from '../data/site';
+import { site } from '../data/site';
 import Icon from './Icon.astro';
+import { type Locale, locales, localeShort, routes } from '../i18n/config';
+import { t } from '../i18n/ui';
+
+interface Props { lang?: Locale; alternates?: Partial<Record<Locale, string>> }
+const { lang = 'en', alternates = {} } = Astro.props;
+const dict = t(lang);
+const r = routes(lang);
+const nav = [
+  { label: dict.nav.services, href: r.services },
+  { label: dict.nav.about, href: r.about },
+  { label: dict.nav.blog, href: r.blog },
+  { label: dict.nav.contact, href: r.contact },
+];
+// Language switcher targets: the matching page in the other locale, or its home.
+const langHref = (l: Locale) => alternates[l] ?? routes(l).home;
 ---
 <header class="site-header">
   <div class="container bar">
-    <a href="/" class="brand" aria-label={`${site.name} home`}>
+    <a href={r.home} class="brand" aria-label={`${site.name} ${dict.common.home}`}>
       <img src={site.logo} alt={`${site.legalName} logo`} width="120" height="49" />
     </a>
 
@@ -13,10 +28,18 @@ import Icon from './Icon.astro';
     </nav>
 
     <div class="actions">
+      <div class="lang" role="group" aria-label={dict.common.langLabel}>
+        {locales.map((l, i) => (
+          <>
+            {i > 0 && <span class="lang-sep" aria-hidden="true">/</span>}
+            <a href={langHref(l)} class={`lang-link${l === lang ? ' is-active' : ''}`} aria-current={l === lang ? 'true' : undefined} hreflang={l}>{localeShort[l]}</a>
+          </>
+        ))}
+      </div>
       <a href={site.phoneHref} class="phone">
         <Icon name="phone" class="ic" /> {site.phoneDisplay}
       </a>
-      <a href="/contact/" class="btn btn--primary">Get a quote</a>
+      <a href={r.contact} class="btn btn--primary">{dict.common.getQuote}</a>
     </div>
 
     <button class="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
@@ -27,7 +50,12 @@ import Icon from './Icon.astro';
   <nav id="mobile-nav" class="mobile" aria-label="Mobile" hidden>
     {nav.map((n) => <a href={n.href}>{n.label}</a>)}
     <a href={site.phoneHref} class="m-phone"><Icon name="phone" class="ic" /> {site.phoneDisplay}</a>
-    <a href="/contact/" class="btn btn--primary">Get a quote</a>
+    <div class="m-lang">
+      {locales.map((l) => (
+        <a href={langHref(l)} class={`lang-link${l === lang ? ' is-active' : ''}`} hreflang={l}>{localeShort[l]}</a>
+      ))}
+    </div>
+    <a href={r.contact} class="btn btn--primary">{dict.common.getQuote}</a>
   </nav>
 </header>
 
@@ -48,6 +76,11 @@ import Icon from './Icon.astro';
   }
   .primary a:hover { color: var(--teal-700); }
   .actions { display: flex; align-items: center; gap: 1rem; }
+  .lang { display: inline-flex; align-items: center; gap: 0.3rem; font-family: var(--font-head); font-weight: 600; font-size: 0.85rem; }
+  .lang-sep { color: var(--line-strong); }
+  .lang-link { color: var(--slate); padding: 0.2rem 0.1rem; }
+  .lang-link:hover { color: var(--teal-700); }
+  .lang-link.is-active { color: var(--teal-700); text-decoration: underline; text-underline-offset: 3px; }
   .phone {
     display: inline-flex; align-items: center; gap: 0.45rem;
     font-family: var(--font-head); font-weight: 600; font-size: 0.92rem; color: var(--ink);
@@ -72,6 +105,8 @@ import Icon from './Icon.astro';
   .mobile a { font-family: var(--font-head); font-weight: 600; padding: 0.7rem 0; color: var(--ink-700); border-bottom: 1px solid var(--line); }
   .mobile .btn { justify-content: center; margin-top: 0.6rem; border-bottom: 0; color: #fff; }
   .mobile .m-phone { display: inline-flex; align-items: center; gap: 0.5rem; }
+  .m-lang { display: flex; gap: 1rem; padding: 0.7rem 0; border-bottom: 1px solid var(--line); }
+  .m-lang .lang-link { border: 0; padding: 0; }
 
   @media (max-width: 940px) {
     .primary, .actions { display: none; }

@@ -1,19 +1,21 @@
 ---
 import { site } from '../data/site';
-interface Props { title?: string; text?: string }
-const {
-  title = 'Ready to let your business thryv?',
-  text = 'Book a free, no-obligation call and discover how a fixed-fee accounting partner can take the stress off your plate.',
-} = Astro.props;
+import { type Locale, routes } from '../i18n/config';
+import { t } from '../i18n/ui';
+interface Props { title?: string; text?: string; lang?: Locale }
+const { lang = 'en', title, text } = Astro.props;
+const dict = t(lang);
+const heading = title ?? dict.cta.title;
+const body = text ?? dict.cta.text;
 ---
 <section class="cta-band">
   <div class="container inner">
     <div>
-      <h2>{title}</h2>
-      <p>{text}</p>
+      <h2>{heading}</h2>
+      <p>{body}</p>
     </div>
     <div class="cta-actions">
-      <a href="/contact/" class="btn btn--light">Book a free call</a>
+      <a href={routes(lang).contact} class="btn btn--light">{dict.common.bookCall}</a>
       <a href={site.phoneHref} class="btn btn--on-dark">{site.phoneDisplay}</a>
     </div>
   </div>
