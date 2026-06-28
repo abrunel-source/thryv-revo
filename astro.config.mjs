@@ -1,9 +1,15 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import vercel from '@astrojs/vercel';
 
 // Production site URL — update if the final domain differs.
 export default defineConfig({
   site: 'https://thryv.co.za',
+  adapter: vercel({
+    webAnalytics: {
+      enabled: true,
+    },
+  }),
   integrations: [
     sitemap({
       changefreq: 'weekly',
